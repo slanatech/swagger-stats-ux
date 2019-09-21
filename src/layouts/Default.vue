@@ -1,6 +1,64 @@
 <template>
+  <q-layout view="hHh lpR fFf">
+
+    <q-header elevated class="bg-primary text-white" height-hint="98">
+      <q-toolbar>
+        <q-btn dense flat round icon="menu" @click="left = !left" />
+
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+          </q-avatar>
+          Title
+        </q-toolbar-title>
+
+        <q-btn dense flat round icon="menu" @click="right = !right" />
+      </q-toolbar>
+
+    </q-header>
+
+    <q-drawer show-if-above v-model="left" side="left" bordered>
+      <q-list>
+        <q-item-label header>Navigation</q-item-label>
+        <q-item to="/" exact>
+          <q-item-section avatar>
+            <q-icon name="home" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Home</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/about" exact>
+          <q-item-section avatar>
+            <q-icon name="info" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>About</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/dashboard" exact>
+          <q-item-section avatar>
+            <q-icon name="signal" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Dashboard</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-drawer>
+
+    <q-drawer show-if-above overlay v-model="right" side="right" bordered>
+      <!-- drawer content -->
+    </q-drawer>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+
+  </q-layout>
+  <!--
   <div class="q-pa-md">
-    <q-layout view="hHh Lpr lFf">
+    <q-layout view="hHh Lpr fFr">
       <q-header elevated class="glossy">
         <q-toolbar>
           <q-btn
@@ -21,7 +79,8 @@
       </q-header>
 
       <q-drawer
-        v-model="leftDrawerOpen"
+        :value="true"
+        :mini="false"
         show-if-above
         elevated
         content-class="bg-grey-2"
@@ -122,11 +181,24 @@
         </q-list>
       </q-drawer>
 
+      <q-drawer
+          v-model="leftDrawerOpen"
+          side="right"
+          :width="200"
+          :breakpoint="500"
+          show-if-above
+          bordered
+          content-class="bg-grey-3"
+      >
+        <div>OPA</div>
+      </q-drawer>
+
       <q-page-container>
         <router-view />
       </q-page-container>
     </q-layout>
   </div>
+  -->
 </template>
 
 <script>
@@ -135,7 +207,10 @@ export default {
 
   data() {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.platform.is.desktop,
+      left: true,
+      right: false
+
     };
   }
 };
