@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
 import { DbData, DbDashboard } from 'dashblocks';
 
 export default {
@@ -75,13 +75,13 @@ export default {
   },
   mounted() {
     this.initialize();
-    this.getStats();
+    this.getStats({ fields: ['timeline', 'apidefs'] });
     this.ready = true;
   },
   methods: {
-    ...mapActions([
-      'getStats' // map `this.getStats()` to `this.$store.dispatch('getStats')`
-    ]),
+    ...mapActions({
+      getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
+    }),
     initialize: function() {
       // Initialize dashboard data - set data for each dashboard widget
       // This is obviously a sample that generates random data
