@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { DbData, DbDashboard } from 'dashblocks';
+import { pathOr } from 'ramda';
 
 export default {
   name: 'SampleDashboard',
@@ -27,6 +28,27 @@ export default {
         widgets: [
           {
             id: 'w1',
+            type: 'DbNumber',
+            cspan: 4,
+            height: 150
+          },
+          {
+            id: 'w2',
+            type: 'DbNumber',
+            cspan: 4
+          },
+          {
+            id: 'w3',
+            type: 'DbNumber',
+            cspan: 4
+          },
+          {
+            id: 'w4',
+            type: 'DbNumber',
+            cspan: 4
+          },
+          {
+            id: 'w5',
             type: 'DbDygraphsBar',
             cspan: 16,
             height: 250,
@@ -39,39 +61,26 @@ export default {
                 legend: 'always'
               }
             }
-          },
-          {
-            id: 'w2',
-            type: 'DbChartjsPie',
-            cspan: 4,
-            height: 250
-          },
-          {
-            id: 'w3',
-            type: 'DbChartjsPie',
-            cspan: 4,
-            properties: {
-              options: {
-                legend: {
-                  position: 'right'
-                }
-              }
-            }
-          },
-          {
-            id: 'w4',
-            type: 'DbChartjsBar',
-            cspan: 4
-          },
-          {
-            id: 'w5',
-            type: 'DbChartjsBar',
-            cspan: 4
           }
         ]
       },
       ready: false
     };
+  },
+  computed: {
+    ...mapState({
+      stats: state => state.stats
+    })
+  },
+  watch: {
+    stats: {
+      handler: function() {
+        console.log(`stats updated`);
+        // Trigger refresh
+        this.refresh();
+      },
+      deep: true
+    }
   },
   mounted() {
     this.initialize();
@@ -92,48 +101,11 @@ export default {
         dthData.push([new Date(sTS + i * 3600 * 1000), Math.random(), Math.random()]);
       }
 
-      this.dbdata.setWData('w1', {
-        data: dthData
-      });
-
-      let dataOneSeries = {
-        labels: ['January', 'February', 'March', 'April'],
-        datasets: [
-          {
-            label: 'Data One',
-            data: [10, 20, 30, 100]
-          }
-        ]
-      };
-
-      let dataTwoSeries = {
-        labels: ['January', 'February', 'March', 'April'],
-        datasets: [
-          {
-            label: 'Data One',
-            data: [10, 20, 30, 100]
-          },
-          {
-            label: 'Data Two',
-            data: [50, 10, 70, 11]
-          }
-        ]
-      };
-
-      this.dbdata.setWData('w2', {
-        data: JSON.parse(JSON.stringify(dataOneSeries))
-      });
-
-      this.dbdata.setWData('w3', {
-        data: JSON.parse(JSON.stringify(dataOneSeries))
-      });
-
-      this.dbdata.setWData('w4', {
-        data: JSON.parse(JSON.stringify(dataOneSeries))
-      });
-      this.dbdata.setWData('w5', {
-        data: JSON.parse(JSON.stringify(dataTwoSeries))
-      });
+      this.dbdata.setWData('w5', {data: dthData});
+    },
+    refresh: function(){
+      this.dbdata.setWData('w1', {value: pathOr(0,['all','requests'],this.stats)});
+      console.log(`Set value: ${pathOr(0,['all','requests'],this.stats)}`);
     }
   }
 };
