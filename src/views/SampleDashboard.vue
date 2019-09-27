@@ -20,9 +20,6 @@ export default {
       timer: null,
       isDark: false,
       dbdata: new DbData(),
-      // Declare Dashboard Layout. Add widgets to your dashboard, specifying how many columns and rows
-      // each widget takes. Dashblocks provides 16-columns CSS Grid layout.
-      // Pass additional options to widgets to adjust appearance as needed.
       dbspec: {
         layout: {
           type: 'grid'
@@ -78,7 +75,6 @@ export default {
     statsUpdated: {
       handler: function() {
         console.log(`stats updated`);
-        // Trigger refresh
         this.updateStats();
       }
     }
