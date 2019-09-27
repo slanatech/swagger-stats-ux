@@ -1,18 +1,20 @@
 import api from '@/store/api';
+import statsContainer from '@/store/statscontainer';
 
 // TODO consider placeholders
 const state = {
-  all: null
+  updated: 0
 };
 
 const getters = {};
 
 const mutations = {
   SET_STATS(state, { stats }) {
-    for (let key of Object.keys(stats)) {
-      // Store whatever we loaded
-      state[key] = stats[key];
-    }
+    // We store all stats in container: there is no need to make all stats observable,
+    // size of stats can be quite big and they can be updated frequently
+    // In Vuex we store the timestamp of last stats update, so views can watch on it and react
+    statsContainer.updateStats(stats);
+    state.updated = Date.now();
   }
 };
 

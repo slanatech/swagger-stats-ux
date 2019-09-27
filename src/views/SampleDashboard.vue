@@ -8,6 +8,7 @@
 import { mapState, mapActions } from 'vuex';
 import { DbData, DbDashboard } from 'dashblocks';
 import { pathOr } from 'ramda';
+import statsContainer from '@/store/statscontainer';
 
 export default {
   name: 'SampleDashboard',
@@ -16,6 +17,7 @@ export default {
   },
   data() {
     return {
+      timer: null,
       isDark: false,
       dbdata: new DbData(),
       // Declare Dashboard Layout. Add widgets to your dashboard, specifying how many columns and rows
@@ -69,17 +71,16 @@ export default {
   },
   computed: {
     ...mapState({
-      stats: state => state.stats
+      statsUpdated: state => state.stats.updated
     })
   },
   watch: {
-    stats: {
+    statsUpdated: {
       handler: function() {
         console.log(`stats updated`);
         // Trigger refresh
-        this.refresh();
-      },
-      deep: true
+        this.updateStats();
+      }
     }
   },
   mounted() {
@@ -92,20 +93,52 @@ export default {
       getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
     }),
     initialize: function() {
-      // Initialize dashboard data - set data for each dashboard widget
-      // This is obviously a sample that generates random data
-      // In real dashboards you would get data from database, backend APIs, vuex, etc
-      let dthData = [];
-      let sTS = Date.now() - 100 * 3600 * 1000;
-      for (let i = 0; i < 100; i++) {
-        dthData.push([new Date(sTS + i * 3600 * 1000), Math.random(), Math.random()]);
-      }
-
-      this.dbdata.setWData('w5', {data: dthData});
+      // Init dashboard data
+      this.dbdata.setWData('w1', { value: 0 });
+      this.dbdata.setWData('w2', { value: 0 });
+      this.dbdata.setWData('w3', { value: 0 });
+      this.dbdata.setWData('w4', { value: 0 });
+      this.dbdata.setWData('w5', { data: [] });
     },
-    refresh: function(){
-      this.dbdata.setWData('w1', {value: pathOr(0,['all','requests'],this.stats)});
-      console.log(`Set value: ${pathOr(0,['all','requests'],this.stats)}`);
+
+    loadStats: function() {
+      this.timer = setTimeout(() => {
+        this.getStats({ fields: ['timeline', 'apidefs'] });
+      }, 10000);
+    },
+
+    updateStats: function() {
+      // Update numbers
+      this.dbdata.setWData('w1', { value: pathOr(0, ['all', 'requests'], statsContainer) });
+      this.dbdata.setWData('w2', { value: pathOr(0, ['all', 'apdex_score'], statsContainer) });
+      this.dbdata.setWData('w3', { value: pathOr(0, ['all', 'req_rate'], statsContainer) });
+      this.dbdata.setWData('w4', { value: pathOr(0, ['all', 'err_rate'], statsContainer) });
+
+      // Update timeline. need to sort as timestampts are object keys
+      // TODO add API to return timeline in array already sorted
+      let timelineSorted = [];
+      let timelineSettings = pathOr(null, ['timeline', 'settings'], statsContainer);
+      let timelineData = pathOr(null, ['timeline', 'data'], statsContainer);
+      if (timelineData && timelineSettings) {
+        for (let key of Object.keys(timelineData)) {
+          let entry = timelineData[key];
+          entry.tc = parseInt(key);
+          entry.ts = entry.tc * (timelineSettings.bucket_duration || 60000);
+          timelineSorted.push(entry);
+        }
+      }
+      // Sort it by timecode ascending
+      timelineSorted.sort(function(a, b) {
+        return a.tc - b.tc;
+      });
+
+      let dthData = [];
+      for (let entry of timelineSorted) {
+        dthData.push([new Date(entry.ts), pathOr(0, ['stats', 'requests'], entry), pathOr(0, ['stats', 'errors'], entry)]);
+      }
+      this.dbdata.setWData('w5', { data: dthData });
+
+      this.loadStats();
     }
   }
 };
