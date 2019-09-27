@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import DefaultLayout from './layouts/Default.vue';
 import Home from './views/Home.vue';
 import About from './views/About.vue';
-import SampleDashboard from './views/SampleDashboard.vue';
+import Summary from './views/summary.vue';
 
 Vue.use(Router);
 
@@ -15,18 +15,13 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'home',
-          component: Home
+          name: 'summary',
+          component: Summary
         },
         {
           path: '/about',
           name: 'about',
           component: About
-        },
-        {
-          path: '/dashboard',
-          name: 'dashboard',
-          component: SampleDashboard
         }
       ]
     }
