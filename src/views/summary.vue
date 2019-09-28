@@ -6,12 +6,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { DbData, DbDashboard } from 'dashblocks';
+//import { DbData, DbDashboard } from 'dashblocks/src/components';
+import DbData from 'dashblocks/src/components/dbdata.js';
+import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 
 export default {
-  name: 'SampleDashboard',
+  name: 'SummaryView',
   components: {
     DbDashboard
   },
@@ -105,11 +107,13 @@ export default {
     },
 
     updateStats: function() {
+      /*
       // Update numbers
       this.dbdata.w1.value = pathOr(0, ['all', 'requests'], statsContainer).toFixed(4);
       this.dbdata.w2.value = pathOr(0, ['all', 'apdex_score'], statsContainer).toFixed(4);
       this.dbdata.w3.value = pathOr(0, ['all', 'req_rate'], statsContainer).toFixed(4);
       this.dbdata.w4.value = pathOr(0, ['all', 'err_rate'], statsContainer).toFixed(4);
+      */
 
       let timelineSorted = statsContainer.getSortedTimeline();
       let dthData = [];

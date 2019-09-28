@@ -7,6 +7,10 @@ import './quasar';
 // Dashblocks CSS
 import 'dashblocks/dist/dashblocks.css';
 
+// TEMP - for development
+//import '../../dashblocks/dist/dashblocks.css';
+
+
 Vue.config.productionTip = false;
 
 new Vue({

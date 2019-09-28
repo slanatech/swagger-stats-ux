@@ -6,12 +6,15 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { DbData, DbDashboard } from 'dashblocks';
+//import { DbData, DbDashboard } from '../../../dashblocks/src/components';
+//import { DbData, DbDashboard } from 'dashblocks';
+import DbData from 'dashblocks/src/components/dbdata.js';
+import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 
 export default {
-  name: 'SampleDashboard',
+  name: 'HorizonView',
   components: {
     DbDashboard
   },
@@ -26,6 +29,22 @@ export default {
         },
         widgets: [
           {
+            id: 'w6',
+            type: 'DbDygraphsBar',
+            cspan: 16,
+            height: 250,
+            properties: {
+              options: {
+                stackedGraph: true,
+                title: 'Traffic over time',
+                ylabel: 'Requests, Mil.',
+                labels: ['Date', 'Success', 'Error'],
+                legend: 'always'
+              }
+            }
+          }
+          /*
+          {
             id: 'w1',
             type: 'DbHorizon',
             cspan: 16,
@@ -33,6 +52,7 @@ export default {
               scheme: 'schemeYlOrBr'
             }
           }
+          */
         ]
       },
       ready: false,
@@ -73,21 +93,21 @@ export default {
     }),
     initialize: function() {
       // Init dashboard data
-      this.dbdata.setWData('w1', { data: [] });
+      //this.dbdata.setWData('w1', { data: [{key:'empty',values:[new Date(),0]}] });
+      this.dbdata.setWData('w6', { data: [] });
     },
 
     // TODO Reconsider
     loadStats: function() {
       this.timer = setTimeout(() => {
         this.getStats({ fields: ['timeline', 'apidefs'] });
-      }, 1000);
+      }, 10000);
     },
 
     updateStats: function() {
+      /*
       let timelineSorted = statsContainer.getSortedTimeline();
-
       let chartData = [];
-
       for (let series of this.seriesDefs) {
         let seriesValues = [];
         for (let entry of timelineSorted) {
@@ -96,10 +116,18 @@ export default {
         }
         chartData.push({ key: series.title, values: seriesValues });
       }
-
       this.dbdata.setWData('w1', { data: chartData });
+      */
 
-      // this.loadStats();
+      let timelineSorted = statsContainer.getSortedTimeline();
+      let dthData = [];
+      for (let entry of timelineSorted) {
+        dthData.push([new Date(entry.ts), pathOr(0, ['stats', 'requests'], entry), pathOr(0, ['stats', 'errors'], entry)]);
+      }
+      this.dbdata.setWData('w6', { data: dthData });
+
+
+      this.loadStats();
 
       /* Update numbers
       this.dbdata.w1.value = pathOr(0, ['all', 'requests'], statsContainer).toFixed(4);

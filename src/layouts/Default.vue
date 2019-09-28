@@ -10,16 +10,15 @@
 
         <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
 
-        <q-btn dense flat round icon="refresh" />
+        <q-btn dense flat size="md" round icon="refresh" />
 
         <q-btn-toggle
           v-model="refreshSpeed"
           text-color="blue-grey-4"
           toggle-text-color="white"
-          size="11px"
+          size="md"
           dense
           flat
-          style="border: 1px solid #90a4ae;"
           :options="refreshOptions"
         />
       </q-toolbar>
