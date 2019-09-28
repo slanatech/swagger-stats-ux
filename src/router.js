@@ -4,6 +4,7 @@ import DefaultLayout from './layouts/Default.vue';
 import Home from './views/Home.vue';
 import About from './views/About.vue';
 import Summary from './views/summary.vue';
+import Horizon from './views/horizon.vue';
 
 Vue.use(Router);
 
@@ -17,6 +18,11 @@ export default new Router({
           path: '',
           name: 'summary',
           component: Summary
+        },
+        {
+          path: '/horizon',
+          name: 'horizon',
+          component: Horizon
         },
         {
           path: '/about',
