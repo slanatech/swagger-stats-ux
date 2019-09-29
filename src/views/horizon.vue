@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
 //import { DbData, DbDashboard } from '../../../dashblocks/src/components';
 //import { DbData, DbDashboard } from 'dashblocks';
-import DbData from 'dashblocks/src/components/dbdata.js';
 import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
+import DbData from 'dashblocks/src/components/dbdata';
+import { mapState, mapActions } from 'vuex';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 
@@ -94,7 +94,8 @@ export default {
     initialize: function() {
       // Init dashboard data
       //this.dbdata.setWData('w1', { data: [{key:'empty',values:[new Date(),0]}] });
-      this.dbdata.setWData('w6', { data: [] });
+      //this.dbdata.setWData('w6', { data: [] });
+      this.dbdata.w6 = { _updated: 0, data: [] };
     },
 
     // TODO Reconsider
@@ -125,6 +126,8 @@ export default {
         dthData.push([new Date(entry.ts), pathOr(0, ['stats', 'requests'], entry), pathOr(0, ['stats', 'errors'], entry)]);
       }
       this.dbdata.setWData('w6', { data: dthData });
+      //this.dbdata.w6.data = dthData;
+      //this.dbdata.w6['_updated'] = Date.now();
 
 
       this.loadStats();

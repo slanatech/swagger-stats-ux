@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-//import { DbData, DbDashboard } from 'dashblocks/src/components';
-import DbData from 'dashblocks/src/components/dbdata.js';
-import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
+import { DbData, DbDashboard } from 'dashblocks/src/components';
+//import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
+//import DbData from 'dashblocks/src/components/dbdata';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'SummaryView',
