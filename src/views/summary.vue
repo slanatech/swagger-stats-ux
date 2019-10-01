@@ -5,9 +5,13 @@
 </template>
 
 <script>
+//import { DbData, DbDashboard } from '../../../dashblocks/src/components';
+//import { DbData, DbDashboard } from 'dashblocks';
+//import { DbData, DbDashboard } from 'dashblocks/src/components';
+//import DbDashboard from '@/db/components/dashboard/DbDashboard.vue';
+//import DbData from '@/db/components/dbdata';
+//import { DbData, DbDashboard } from '@/db/components';
 import { DbData, DbDashboard } from 'dashblocks/src/components';
-//import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
-//import DbData from 'dashblocks/src/components/dbdata';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
@@ -33,6 +37,7 @@ export default {
             cspan: 4,
             height: 150
           },
+          /*
           {
             id: 'w2',
             type: 'DbNumber',
@@ -63,6 +68,7 @@ export default {
               }
             }
           }
+           */
         ]
       },
       ready: false
@@ -93,10 +99,12 @@ export default {
     initialize: function() {
       // Init dashboard data
       this.dbdata.setWData('w1', { value: 0 });
+      /*
       this.dbdata.setWData('w2', { value: 0 });
       this.dbdata.setWData('w3', { value: 0 });
       this.dbdata.setWData('w4', { value: 0 });
       this.dbdata.setWData('w5', { data: [] });
+      */
     },
 
     // TODO Reconsider
@@ -107,13 +115,15 @@ export default {
     },
 
     updateStats: function() {
+
+      this.dbdata.setWData('w1', { value: pathOr(0, ['all', 'requests'], statsContainer) });
+
       /*
       // Update numbers
       this.dbdata.w1.value = pathOr(0, ['all', 'requests'], statsContainer).toFixed(4);
       this.dbdata.w2.value = pathOr(0, ['all', 'apdex_score'], statsContainer).toFixed(4);
       this.dbdata.w3.value = pathOr(0, ['all', 'req_rate'], statsContainer).toFixed(4);
       this.dbdata.w4.value = pathOr(0, ['all', 'err_rate'], statsContainer).toFixed(4);
-      */
 
       let timelineSorted = statsContainer.getSortedTimeline();
       let dthData = [];
@@ -121,6 +131,7 @@ export default {
         dthData.push([new Date(entry.ts), pathOr(0, ['stats', 'requests'], entry), pathOr(0, ['stats', 'errors'], entry)]);
       }
       this.dbdata.setWData('w5', { data: dthData });
+      */
 
       this.loadStats();
     }

@@ -5,7 +5,7 @@ import store from './store/store';
 import './quasar';
 
 // Dashblocks CSS
-import 'dashblocks/dist/dashblocks.css';
+//import '../../dashblocks/dist/dashblocks.css';
 
 // TEMP - for development
 //import '../../dashblocks/dist/dashblocks.css';

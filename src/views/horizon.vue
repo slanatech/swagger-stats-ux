@@ -7,8 +7,11 @@
 <script>
 //import { DbData, DbDashboard } from '../../../dashblocks/src/components';
 //import { DbData, DbDashboard } from 'dashblocks';
-import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
-import DbData from 'dashblocks/src/components/dbdata';
+//import DbDashboard from 'dashblocks/src/components/dashboard/DbDashboard.vue';
+//import DbData from 'dashblocks/src/components/dbdata';
+//import DbDashboard from '@/db/components/dashboard/DbDashboard.vue';
+//import DbData from '@/db/components/dbdata';
+import { DbData, DbDashboard } from 'dashblocks/src/components';
 import { mapState, mapActions } from 'vuex';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
@@ -94,8 +97,8 @@ export default {
     initialize: function() {
       // Init dashboard data
       //this.dbdata.setWData('w1', { data: [{key:'empty',values:[new Date(),0]}] });
-      //this.dbdata.setWData('w6', { data: [] });
-      this.dbdata.w6 = { _updated: 0, data: [] };
+      this.dbdata.setWData('w6', { data: [] });
+      //this.dbdata.w6 = { _updated: 0, data: [] };
     },
 
     // TODO Reconsider
