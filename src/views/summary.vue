@@ -5,13 +5,10 @@
 </template>
 
 <script>
-//import { DbData, DbDashboard } from '../../../dashblocks/src/components';
-//import { DbData, DbDashboard } from 'dashblocks';
-//import { DbData, DbDashboard } from 'dashblocks/src/components';
-//import DbDashboard from '@/db/components/dashboard/DbDashboard.vue';
-//import DbData from '@/db/components/dbdata';
-//import { DbData, DbDashboard } from '@/db/components';
-import { DbData, DbDashboard } from 'dashblocks/src/components';
+// Development
+import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
+// Prod
+// import { DbData, DbDashboard } from 'dashblocks';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
