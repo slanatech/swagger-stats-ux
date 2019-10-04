@@ -32,23 +32,38 @@ export default {
             id: 'w1',
             type: 'DbNumber',
             cspan: 4,
-            height: 150
+            height: 150,
+            properties: {
+              title: 'Requests',
+              subtitle: 'Total requests received'
+            }
           },
-          /*
           {
             id: 'w2',
             type: 'DbNumber',
-            cspan: 4
+            cspan: 4,
+            properties: {
+              title: 'Apdex Score',
+              subtitle: 'Overall Apdex Score'
+            }
           },
           {
             id: 'w3',
             type: 'DbNumber',
-            cspan: 4
+            cspan: 4,
+            properties: {
+              title: 'Requests Rate',
+              subtitle: 'Requests per second'
+            }
           },
           {
             id: 'w4',
             type: 'DbNumber',
-            cspan: 4
+            cspan: 4,
+            properties: {
+              title: 'Error Rate',
+              subtitle: 'Errors per second'
+            }
           },
           {
             id: 'w5',
@@ -59,13 +74,12 @@ export default {
               options: {
                 stackedGraph: true,
                 title: 'Traffic over time',
-                ylabel: 'Requests, Mil.',
+                ylabel: 'Requests',
                 labels: ['Date', 'Success', 'Error'],
                 legend: 'always'
               }
             }
           }
-           */
         ]
       },
       ready: false
@@ -95,41 +109,40 @@ export default {
     }),
     initialize: function() {
       // Init dashboard data
-      this.dbdata.setWData('w1', { value: 0 });
-      /*
+      this.dbdata.setWData('w1', { value: 0, trend: [] });
       this.dbdata.setWData('w2', { value: 0 });
       this.dbdata.setWData('w3', { value: 0 });
       this.dbdata.setWData('w4', { value: 0 });
       this.dbdata.setWData('w5', { data: [] });
-      */
     },
 
     // TODO Reconsider
     loadStats: function() {
       this.timer = setTimeout(() => {
         this.getStats({ fields: ['timeline', 'apidefs'] });
-      }, 10000);
+      }, 1000);
     },
+
 
     updateStats: function() {
 
-      this.dbdata.setWData('w1', { value: pathOr(0, ['all', 'requests'], statsContainer) });
-
-      /*
       // Update numbers
-      this.dbdata.w1.value = pathOr(0, ['all', 'requests'], statsContainer).toFixed(4);
-      this.dbdata.w2.value = pathOr(0, ['all', 'apdex_score'], statsContainer).toFixed(4);
-      this.dbdata.w3.value = pathOr(0, ['all', 'req_rate'], statsContainer).toFixed(4);
-      this.dbdata.w4.value = pathOr(0, ['all', 'err_rate'], statsContainer).toFixed(4);
+      this.dbdata.w1.value = pathOr(0, ['all', 'requests'], statsContainer);
+      this.dbdata.w2.value = pathOr(0, ['all', 'apdex_score'], statsContainer);
+      this.dbdata.w3.value = pathOr(0, ['all', 'req_rate'], statsContainer);
+      this.dbdata.w4.value = pathOr(0, ['all', 'err_rate'], statsContainer);
+
+      this.dbdata.w1.trend = [];
 
       let timelineSorted = statsContainer.getSortedTimeline();
       let dthData = [];
       for (let entry of timelineSorted) {
         dthData.push([new Date(entry.ts), pathOr(0, ['stats', 'requests'], entry), pathOr(0, ['stats', 'errors'], entry)]);
+        // Trend for requests
+        this.dbdata.w1.trend.push(pathOr(0, ['stats', 'requests'], entry));
       }
       this.dbdata.setWData('w5', { data: dthData });
-      */
-
+      this.dbdata.touch('w1');
       this.loadStats();
     }
   }
