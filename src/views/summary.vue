@@ -32,41 +32,55 @@ export default {
             id: 'w1',
             type: 'DbNumber',
             cspan: 4,
-            height: 150,
             properties: {
               title: 'Requests',
-              subtitle: 'Total requests received'
+              subtitle: 'Total requests received',
+              icon: 'fa fa-signal'
             }
           },
           {
             id: 'w2',
             type: 'DbNumber',
-            cspan: 4,
+            cspan: 3,
             properties: {
               title: 'Apdex Score',
-              subtitle: 'Overall Apdex Score'
+              subtitle: 'Overall Apdex Score',
+              total: 0.01,
+              format: '%.2f'
             }
           },
           {
             id: 'w3',
             type: 'DbNumber',
-            cspan: 4,
+            cspan: 3,
             properties: {
               title: 'Requests Rate',
-              subtitle: 'Requests per second'
+              subtitle: 'Requests per second',
+              format: '%.2f'
             }
           },
           {
             id: 'w4',
             type: 'DbNumber',
-            cspan: 4,
+            cspan: 3,
             properties: {
               title: 'Error Rate',
-              subtitle: 'Errors per second'
+              subtitle: 'Errors per second',
+              format: '%.2f'
             }
           },
           {
             id: 'w5',
+            type: 'DbNumber',
+            cspan: 3,
+            properties: {
+              title: 'CPU',
+              subtitle: 'CPU Usage',
+              format: '%.2f'
+            }
+          },
+          {
+            id: 'w15',
             type: 'DbDygraphsBar',
             cspan: 16,
             height: 250,
@@ -113,7 +127,7 @@ export default {
       this.dbdata.setWData('w2', { value: 0 });
       this.dbdata.setWData('w3', { value: 0 });
       this.dbdata.setWData('w4', { value: 0 });
-      this.dbdata.setWData('w5', { data: [] });
+      this.dbdata.setWData('w15', { data: [] });
     },
 
     // TODO Reconsider
@@ -141,7 +155,7 @@ export default {
         // Trend for requests
         this.dbdata.w1.trend.push(pathOr(0, ['stats', 'requests'], entry));
       }
-      this.dbdata.setWData('w5', { data: dthData });
+      this.dbdata.setWData('w15', { data: dthData });
       this.dbdata.touch('w1');
       this.loadStats();
     }
