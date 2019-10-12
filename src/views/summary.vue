@@ -29,80 +29,58 @@ export default {
           size: 12
         },
         widgets: [
+          { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Requests', subtitle: 'Total requests received', icon: 'fa fa-signal' } },
+          { id: 'w2', type: 'DbNumber', cspan: 2, properties: { title: 'Apdex Score', subtitle: 'Overall Apdex Score', total: 1, trendMax: 1, format: '%.2f' } },
+          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Requests Rate', subtitle: 'Requests per second', format: '%.2f' } },
+          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Error Rate', subtitle: 'Errors per second', format: '%.2f' } },
+          { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'CPU', subtitle: 'CPU Usage', total: 100, trendMax: 100, format: '%.2f %s', qualifier: '%' } },
+          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Memory', subtitle: 'heapUsed', format: '%.2f %s' } },
+
+          { id: 'w7', type: 'DbNumber', cspan: 2, properties: { title: 'Errors', subtitle: 'Total Error Responses' } },
+          { id: 'w8', type: 'DbNumber', cspan: 2, properties: { title: '2XX', subtitle: 'Success Responses' } },
+          { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: '3XX', subtitle: 'Redirect Responses' } },
+          { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: '4XX', subtitle: 'Client Error Responses' } },
+          { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: '5XX', subtitle: 'Server Error Responses' } },
+          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Avg HT', subtitle: 'Average Handle Time', format: '%d ms' } },
           {
-            id: 'w1',
-            type: 'DbNumber',
-            cspan: 2,
+            id: 'w14',
+            type: 'DbDygraphsLine',
+            cspan: 12,
+            height: 140,
             properties: {
-              title: 'Requests',
-              subtitle: 'Total requests received',
-              icon: 'fa fa-signal'
-            }
-          },
-          {
-            id: 'w2',
-            type: 'DbNumber',
-            cspan: 2,
-            properties: {
-              title: 'Apdex Score',
-              subtitle: 'Overall Apdex Score',
-              total: 1,
-              format: '%.2f'
-            }
-          },
-          {
-            id: 'w3',
-            type: 'DbNumber',
-            cspan: 2,
-            properties: {
-              title: 'Requests Rate',
-              subtitle: 'Requests per second',
-              format: '%.2f'
-            }
-          },
-          {
-            id: 'w4',
-            type: 'DbNumber',
-            cspan: 2,
-            properties: {
-              title: 'Error Rate',
-              subtitle: 'Errors per second',
-              format: '%.2f'
-            }
-          },
-          {
-            id: 'w5',
-            type: 'DbNumber',
-            cspan: 2,
-            properties: {
-              title: 'CPU',
-              subtitle: 'CPU Usage',
-              total: 100,
-              format: '%.2f %s',
-              qualifier: '%'
-            }
-          },
-          {
-            id: 'w6',
-            type: 'DbNumber',
-            cspan: 2,
-            properties: {
-              title: 'Memory',
-              subtitle: 'Memory Usage',
-              format: '%.2f %s'
+              options: {
+                stackedGraph: false,
+                title: 'CPU',
+                ylabel: 'CPU, %',
+                labels: ['Date','CPU']
+              }
             }
           },
           {
             id: 'w15',
+            type: 'DbDygraphsLine',
+            cspan: 12,
+            height: 140,
+            properties: {
+              options: {
+                stackedGraph: false,
+                title: 'Memory',
+                ylabel: 'MB',
+                labels: ['Date','rss','heapTotal', 'heapUsed']
+              }
+            }
+          },
+          {
+            id: 'w16',
             type: 'DbDygraphsBar',
             cspan: 12,
             height: 250,
             properties: {
               options: {
                 stackedGraph: true,
-                title: 'Traffic over time',
+                title: 'Traffic',
                 ylabel: 'Requests',
-                labels: ['Date', 'Success', 'Error'],
+                labels: ['Date', 'Success', 'Redirect', 'Client Error','Server Error'],
                 legend: 'always'
               }
             }
@@ -141,8 +119,16 @@ export default {
       this.dbdata.setWData('w3', { value: 0, trend: [] });
       this.dbdata.setWData('w4', { value: 0, trend: [] });
       this.dbdata.setWData('w5', { value: 0, trend: [] });
-      this.dbdata.setWData('w6', { value: 0, qualifier:'', trend: [] });
+      this.dbdata.setWData('w6', { value: 0, qualifier: '', trend: [] });
+      this.dbdata.setWData('w7', { value: 0, trend: [] });
+      this.dbdata.setWData('w8', { value: 0, trend: [] });
+      this.dbdata.setWData('w9', { value: 0, trend: [] });
+      this.dbdata.setWData('w10', { value: 0, trend: [] });
+      this.dbdata.setWData('w11', { value: 0, trend: [] });
+      this.dbdata.setWData('w12', { value: 0, trend: [] });
+      this.dbdata.setWData('w14', { data: [] });
       this.dbdata.setWData('w15', { data: [] });
+      this.dbdata.setWData('w16', { data: [] });
     },
 
     // TODO Reconsider
@@ -154,57 +140,75 @@ export default {
 
     updateStats: function() {
       // Update numbers
-      this.dbdata.w1.value = pathOr(0, ['all', 'requests'], statsContainer);
-      this.dbdata.w2.value = pathOr(0, ['all', 'apdex_score'], statsContainer);
-      this.dbdata.w3.value = pathOr(0, ['all', 'req_rate'], statsContainer);
-      this.dbdata.w4.value = pathOr(0, ['all', 'err_rate'], statsContainer);
-      this.dbdata.w5.value = pathOr(0, ['sys', 'cpu'], statsContainer);
-      // TODO Fix error - value should be number
-      //this.dbdata.setWData('w6', { value: , trend: [] });
-      let {value,qualifier} = this.formatBytes(pathOr(0, ['sys', 'heapUsed'], statsContainer), 2);
-      this.dbdata.w6.value = value;
-      this.dbdata.w6.qualifier = qualifier;
+      let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
+      let requestRate = pathOr(0, ['all', 'req_rate'], statsContainer);
 
-      this.dbdata.w1.trend = [];
-      this.dbdata.w2.trend = [];
-      this.dbdata.w3.trend = [];
-      this.dbdata.w4.trend = [];
-      this.dbdata.w5.trend = [];
-      this.dbdata.w6.trend = [];
+      let trendsData = [[], [], [], [], [], [], [], [], [], [], [], []];
+      let dthData = [];
+      let cpuData = [];
+      let memData = [];
 
       let timelineSorted = statsContainer.getSortedTimeline();
-      let dthData = [];
       //let trendReqData =  [];
       for (let entry of timelineSorted) {
-        dthData.push([new Date(entry.ts), pathOr(0, ['stats', 'requests'], entry), pathOr(0, ['stats', 'errors'], entry)]);
-        // Trend for requests
-        this.dbdata.w1.trend.push(pathOr(0, ['stats', 'requests'], entry));
-        this.dbdata.w2.trend.push(pathOr(0, ['stats', 'apdex_score'], entry));
-        this.dbdata.w3.trend.push(pathOr(0, ['stats', 'req_rate'], entry));
-        this.dbdata.w4.trend.push(pathOr(0, ['stats', 'err_rate'], entry));
-        this.dbdata.w5.trend.push(pathOr(0, ['sys', 'cpu'], entry));
-        this.dbdata.w6.trend.push(pathOr(0, ['sys', 'heapUsed'], entry));
-        //trendReqData.push(pathOr(0, ['stats', 'requests'], entry));
+        dthData.push([
+          new Date(entry.ts),
+          pathOr(0, ['stats', 'success'], entry),
+          pathOr(0, ['stats', 'redirect'], entry),
+          pathOr(0, ['stats', 'client_error'], entry),
+          pathOr(0, ['stats', 'server_error'], entry)
+        ]);
+        cpuData.push([new Date(entry.ts), pathOr(0, ['sys', 'cpu'], entry)]);
+        memData.push([
+          new Date(entry.ts),
+          pathOr(0, ['sys', 'rss'], entry) / 1048576,
+          pathOr(0, ['sys', 'heapTotal'], entry) / 1048576,
+          pathOr(0, ['sys', 'heapUsed'], entry) / 1048576
+        ]);
+        // Trends
+        trendsData[0].push(pathOr(0, ['stats', 'requests'], entry));
+        trendsData[1].push(pathOr(0, ['stats', 'apdex_score'], entry));
+        trendsData[2].push(pathOr(0, ['stats', 'req_rate'], entry));
+        trendsData[3].push(pathOr(0, ['stats', 'err_rate'], entry));
+        trendsData[4].push(pathOr(0, ['sys', 'cpu'], entry));
+        trendsData[5].push(pathOr(0, ['sys', 'heapUsed'], entry));
+        trendsData[6].push(pathOr(0, ['stats', 'errors'], entry));
+        trendsData[7].push(pathOr(0, ['stats', 'success'], entry));
+        trendsData[8].push(pathOr(0, ['stats', 'redirect'], entry));
+        trendsData[9].push(pathOr(0, ['stats', 'client_error'], entry));
+        trendsData[10].push(pathOr(0, ['stats', 'server_error'], entry));
       }
-      //trendReqData = this.collapse(trendReqData, 1);
-      //this.dbdata.w1.trend = trendReqData;
-      this.dbdata.setWData('w15', { data: dthData });
-      this.dbdata.touch('w1');
-      this.dbdata.touch('w2');
-      this.dbdata.touch('w3');
-      this.dbdata.touch('w4');
-      this.dbdata.touch('w5');
-      this.dbdata.touch('w6');
+
+      let reqTrendMax = Math.max(...trendsData[0]);
+      let reqRateTrendMax = Math.max(...trendsData[2]);
+      this.dbdata.setWData('w1', { value: requestsTotal, trend: trendsData[0] });
+      this.dbdata.setWData('w2', { value: pathOr(0, ['all', 'apdex_score'], statsContainer), trend: trendsData[1] });
+      this.dbdata.setWData('w3', { value: requestRate, trend: trendsData[2] });
+      this.dbdata.setWData('w4', { value: pathOr(0, ['all', 'err_rate'], statsContainer), trend: trendsData[3], trendMax: reqRateTrendMax });
+      this.dbdata.setWData('w5', { value: pathOr(0, ['sys', 'cpu'], statsContainer), trend: trendsData[4] });
+      let { value, qualifier } = this.formatBytes(pathOr(0, ['sys', 'heapUsed'], statsContainer), 2);
+      this.dbdata.setWData('w6', { value: value, qualifier: qualifier, trend: trendsData[5] });
+
+      this.dbdata.setWData('w7', { value: pathOr(0, ['all', 'errors'], statsContainer), trend: trendsData[6], trendMax: reqTrendMax, total: requestsTotal });
+      this.dbdata.setWData('w8', { value: pathOr(0, ['all', 'success'], statsContainer), trend: trendsData[7], trendMax: reqTrendMax, total: requestsTotal });
+      this.dbdata.setWData('w9', { value: pathOr(0, ['all', 'redirect'], statsContainer), trend: trendsData[8], trendMax: reqTrendMax, total: requestsTotal });
+      this.dbdata.setWData('w10', { value: pathOr(0, ['all', 'client_error'], statsContainer), trend: trendsData[9], trendMax: reqTrendMax, total: requestsTotal });
+      this.dbdata.setWData('w11', { value: pathOr(0, ['all', 'server_error'], statsContainer), trend: trendsData[10], trendMax: reqTrendMax, total: requestsTotal });
+
+      this.dbdata.setWData('w14', { data: cpuData });
+      this.dbdata.setWData('w15', { data: memData });
+      this.dbdata.setWData('w16', { data: dthData });
+
       this.loadStats();
     },
 
     formatBytes: function(a, b) {
-      if (0 === a) return {value:0,qualifier:'Bytes'};
+      if (0 === a) return { value: 0, qualifier: 'Bytes' };
       let c = 1e3,
         d = b || 2,
         e = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
         f = Math.floor(Math.log(a) / Math.log(c));
-      return { value:parseFloat((a / Math.pow(c, f)).toFixed(d)),qualifier:e[f]};
+      return { value: parseFloat((a / Math.pow(c, f)).toFixed(d)), qualifier: e[f] };
     },
 
     collapse: function(array, chunkSize) {
