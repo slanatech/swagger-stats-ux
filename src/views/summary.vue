@@ -28,20 +28,35 @@ export default {
           type: 'grid',
           size: 12
         },
+        // prettier-ignore
         widgets: [
           { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Requests', subtitle: 'Total requests received', icon: 'fa fa-signal' } },
-          { id: 'w2', type: 'DbNumber', cspan: 2, properties: { title: 'Apdex Score', subtitle: 'Overall Apdex Score', total: 1, trendMax: 1, format: '%.2f' } },
-          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Requests Rate', subtitle: 'Requests per second', format: '%.2f' } },
-          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Error Rate', subtitle: 'Errors per second', format: '%.2f' } },
+          { id: 'w2', type: 'DbNumber', cspan: 2, properties: {
+            title: 'Apdex Score', subtitle: 'Overall Apdex Score', total: 1, trendMax: 1, format: '%.2f',
+            percentRanges: [
+              { value: 50, color: 'red'},
+              { value: 60, color: 'orange'},
+              { value: 100, color: 'green'},
+            ]}
+          },
+          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Requests Rate', subtitle: 'Requests per second', format: '%.2f', icon: 'fa fa-exchange-alt' } },
+          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Error Rate', subtitle: 'Errors per second', format: '%.2f', icon: 'fa fa-exclamation' } },
           { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'CPU', subtitle: 'CPU Usage', total: 100, trendMax: 100, format: '%.2f %s', qualifier: '%' } },
-          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Memory', subtitle: 'heapUsed', format: '%.2f %s' } },
+          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Memory', subtitle: 'heapUsed', format: '%.2f %s', icon: 'fa fa-sd-card' } },
 
           { id: 'w7', type: 'DbNumber', cspan: 2, properties: { title: 'Errors', subtitle: 'Total Error Responses' } },
-          { id: 'w8', type: 'DbNumber', cspan: 2, properties: { title: '2XX', subtitle: 'Success Responses' } },
+          { id: 'w8', type: 'DbNumber', cspan: 2, properties: {
+            title: '2XX', subtitle: 'Success Responses',
+            percentRanges: [
+              { value: 50, color: 'red'},
+              { value: 70, color: 'orange'},
+              { value: 100, color: 'green'}
+            ]}
+          },
           { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: '3XX', subtitle: 'Redirect Responses' } },
           { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: '4XX', subtitle: 'Client Error Responses' } },
           { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: '5XX', subtitle: 'Server Error Responses' } },
-          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Avg HT', subtitle: 'Average Handle Time', format: '%d ms' } },
+          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Avg HT', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
           {
             id: 'w14',
             type: 'DbDygraphsLine',
@@ -66,7 +81,7 @@ export default {
                 stackedGraph: false,
                 title: 'Memory',
                 ylabel: 'MB',
-                labels: ['Date','rss','heapTotal', 'heapUsed']
+                labels: ['Date','heapTotal', 'heapUsed']
               }
             }
           },
@@ -161,7 +176,6 @@ export default {
         cpuData.push([new Date(entry.ts), pathOr(0, ['sys', 'cpu'], entry)]);
         memData.push([
           new Date(entry.ts),
-          pathOr(0, ['sys', 'rss'], entry) / 1048576,
           pathOr(0, ['sys', 'heapTotal'], entry) / 1048576,
           pathOr(0, ['sys', 'heapUsed'], entry) / 1048576
         ]);
@@ -177,6 +191,7 @@ export default {
         trendsData[8].push(pathOr(0, ['stats', 'redirect'], entry));
         trendsData[9].push(pathOr(0, ['stats', 'client_error'], entry));
         trendsData[10].push(pathOr(0, ['stats', 'server_error'], entry));
+        trendsData[11].push(pathOr(0, ['stats', 'avg_time'], entry));
       }
 
       let reqTrendMax = Math.max(...trendsData[0]);
@@ -194,6 +209,7 @@ export default {
       this.dbdata.setWData('w9', { value: pathOr(0, ['all', 'redirect'], statsContainer), trend: trendsData[8], trendMax: reqTrendMax, total: requestsTotal });
       this.dbdata.setWData('w10', { value: pathOr(0, ['all', 'client_error'], statsContainer), trend: trendsData[9], trendMax: reqTrendMax, total: requestsTotal });
       this.dbdata.setWData('w11', { value: pathOr(0, ['all', 'server_error'], statsContainer), trend: trendsData[10], trendMax: reqTrendMax, total: requestsTotal });
+      this.dbdata.setWData('w12', { value: pathOr(0, ['all', 'avg_time'], statsContainer), trend: trendsData[11] });
 
       this.dbdata.setWData('w14', { data: cpuData });
       this.dbdata.setWData('w15', { data: memData });
