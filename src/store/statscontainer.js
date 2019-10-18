@@ -11,6 +11,15 @@ class StatsContainer {
     }
   }
 
+  getCurrentTimelineBucket() {
+    let timelineSettings = pathOr(null, ['timeline', 'settings'], this);
+    let timelineData = pathOr(null, ['timeline', 'data'], this);
+    if (timelineData && timelineSettings) {
+      return timelineData[timelineSettings.bucket_current];
+    }
+    return {};
+  }
+
   // Returns timeline sorted by timestampts asc
   // TODO add API to return timeline in array already sorted
   getSortedTimeline() {

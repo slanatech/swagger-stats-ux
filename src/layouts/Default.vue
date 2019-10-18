@@ -79,7 +79,7 @@
             <q-icon name="far fa-clock" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Longest Requests</q-item-label>
+            <q-item-label>Rates & Durations</q-item-label>
           </q-item-section>
         </q-item>
         <q-item to="/api" exact>

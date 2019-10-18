@@ -39,8 +39,8 @@ export default {
               { value: 100, color: 'green'},
             ]}
           },
-          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Requests Rate', subtitle: 'Requests per second', format: '%.2f', icon: 'fa fa-exchange-alt' } },
-          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Error Rate', subtitle: 'Errors per second', format: '%.2f', icon: 'fa fa-exclamation' } },
+          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Current Req Rate', subtitle: 'Requests per second', footer: 'On last time interval',format: '%.2f', icon: 'fa fa-exchange-alt' } },
+          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Current Err Rate', subtitle: 'Errors per second', format: '%.2f', icon: 'fa fa-exclamation' } },
           { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'CPU', subtitle: 'CPU Usage', total: 100, trendMax: 100, format: '%.2f %s', qualifier: '%' } },
           { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Memory', subtitle: 'heapUsed', format: '%.2f %s', icon: 'fa fa-sd-card' } },
 
@@ -56,7 +56,7 @@ export default {
           { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: '3XX', subtitle: 'Redirect Responses' } },
           { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: '4XX', subtitle: 'Client Error Responses' } },
           { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: '5XX', subtitle: 'Server Error Responses' } },
-          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Avg HT', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
+          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Current Avg HT', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
           {
             id: 'w14',
             type: 'DbDygraphsLine',
@@ -156,7 +156,6 @@ export default {
     updateStats: function() {
       // Update numbers
       let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
-      let requestRate = pathOr(0, ['all', 'req_rate'], statsContainer);
 
       let trendsData = [[], [], [], [], [], [], [], [], [], [], [], []];
       let dthData = [];
@@ -194,12 +193,17 @@ export default {
         trendsData[11].push(pathOr(0, ['stats', 'avg_time'], entry));
       }
 
+      let lastTimeBucket = statsContainer.getCurrentTimelineBucket();
+      let requestRate = pathOr(0, ['stats', 'req_rate'], lastTimeBucket);
+      let errRate = pathOr(0, ['stats', 'err_rate'], lastTimeBucket);
+      let avgHT = pathOr(0, ['stats', 'avg_time'], lastTimeBucket);
+
       let reqTrendMax = Math.max(...trendsData[0]);
       let reqRateTrendMax = Math.max(...trendsData[2]);
       this.dbdata.setWData('w1', { value: requestsTotal, trend: trendsData[0] });
       this.dbdata.setWData('w2', { value: pathOr(0, ['all', 'apdex_score'], statsContainer), trend: trendsData[1] });
       this.dbdata.setWData('w3', { value: requestRate, trend: trendsData[2] });
-      this.dbdata.setWData('w4', { value: pathOr(0, ['all', 'err_rate'], statsContainer), trend: trendsData[3], trendMax: reqRateTrendMax });
+      this.dbdata.setWData('w4', { value: errRate, trend: trendsData[3], trendMax: reqRateTrendMax });
       this.dbdata.setWData('w5', { value: pathOr(0, ['sys', 'cpu'], statsContainer), trend: trendsData[4] });
       let { value, qualifier } = this.formatBytes(pathOr(0, ['sys', 'heapUsed'], statsContainer), 2);
       this.dbdata.setWData('w6', { value: value, qualifier: qualifier, trend: trendsData[5] });
@@ -209,7 +213,7 @@ export default {
       this.dbdata.setWData('w9', { value: pathOr(0, ['all', 'redirect'], statsContainer), trend: trendsData[8], trendMax: reqTrendMax, total: requestsTotal });
       this.dbdata.setWData('w10', { value: pathOr(0, ['all', 'client_error'], statsContainer), trend: trendsData[9], trendMax: reqTrendMax, total: requestsTotal });
       this.dbdata.setWData('w11', { value: pathOr(0, ['all', 'server_error'], statsContainer), trend: trendsData[10], trendMax: reqTrendMax, total: requestsTotal });
-      this.dbdata.setWData('w12', { value: pathOr(0, ['all', 'avg_time'], statsContainer), trend: trendsData[11] });
+      this.dbdata.setWData('w12', { value: avgHT, trend: trendsData[11] });
 
       this.dbdata.setWData('w14', { data: cpuData });
       this.dbdata.setWData('w15', { data: memData });
