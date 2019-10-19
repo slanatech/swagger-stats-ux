@@ -1,8 +1,16 @@
 <template>
   <q-page padding>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
-    <div style="height: 300px;padding: 4px;">
-      <vue-good-table :columns="columns" :rows="rows" />
+    <div style="padding: 4px;">
+      <vue-good-table
+        :columns="columns"
+        :rows="rows"
+        styleClass="vgt-table condensed bordered"
+        :search-options="{
+          enabled: true,
+          skipDiacritics: true
+        }"
+      />
     </div>
   </q-page>
 </template>
@@ -27,23 +35,23 @@ export default {
       isDark: false,
       columns: [
         {
-          label: 'Path',
-          field: 'name'
+          label: 'Method',
+          field: 'method'
         },
         {
-          label: 'Method',
-          field: 'age'
+          label: 'Path',
+          field: 'path'
         },
         {
           label: 'Requests',
-          field: 'age',
+          field: 'requests',
           type: 'number'
         },
         {
-          label: 'Responses',
-          field: 'age',
+          label: 'Errors',
+          field: 'errors',
           type: 'number'
-        },
+        }
       ],
       rows: [],
       dbdata: new DbData(),
@@ -87,7 +95,7 @@ export default {
   },
   mounted() {
     this.initialize();
-    this.getStats({ fields: ['timeline', 'apidefs'] });
+    this.getStats({ fields: ['apistats'] });
     this.ready = true;
   },
   methods: {
@@ -107,14 +115,16 @@ export default {
     // TODO Reconsider
     loadStats: function() {
       this.timer = setTimeout(() => {
-        this.getStats({ fields: ['timeline', 'apidefs'] });
+        this.getStats({ fields: ['apistats'] });
       }, 1000);
     },
 
     updateStats: function() {
       // Update numbers
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
-      // TODO
+      this.rows = statsContainer.getApiStatsArray();
+
+      this.loadStats();
     }
   }
 };

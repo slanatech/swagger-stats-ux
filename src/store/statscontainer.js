@@ -11,6 +11,29 @@ class StatsContainer {
     }
   }
 
+  getApiStatsArray() {
+    let res = [];
+    let apiSettings = pathOr(null, ['apistats'], this);
+    if (!apiSettings) {
+      return res;
+    }
+    for (let apiPath of Object.keys(apiSettings)) {
+      let apiMethods = apiSettings[apiPath];
+      for (let apiMethod of Object.keys(apiMethods)) {
+        res.push(
+          Object.assign(
+            {
+              path: apiPath,
+              method: apiMethod
+            },
+            apiMethods[apiMethod]
+          )
+        );
+      }
+    }
+    return res;
+  }
+
   getCurrentTimelineBucket() {
     let timelineSettings = pathOr(null, ['timeline', 'settings'], this);
     let timelineData = pathOr(null, ['timeline', 'data'], this);
