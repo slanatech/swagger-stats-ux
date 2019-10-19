@@ -3,6 +3,10 @@ import App from './App.vue';
 import router from './router';
 import store from './store/store';
 import './quasar';
+import VueGoodTablePlugin from 'vue-good-table';
+
+
+import 'vue-good-table/dist/vue-good-table.css'
 
 // Dashblocks CSS
 //import '../../dashblocks/dist/dashblocks.css';
@@ -10,8 +14,9 @@ import './quasar';
 // TEMP - for development
 //import '../../dashblocks/dist/dashblocks.css';
 
-
 Vue.config.productionTip = false;
+
+Vue.use(VueGoodTablePlugin);
 
 new Vue({
   router,
