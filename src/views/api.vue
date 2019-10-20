@@ -5,10 +5,17 @@
       <vue-good-table
         :columns="columns"
         :rows="rows"
-        styleClass="vgt-table condensed bordered"
+        styleClass="vgt-table condensed bordered striped"
         :search-options="{
           enabled: true,
           skipDiacritics: true
+        }"
+        :pagination-options="{
+          enabled: true,
+          mode: 'records',
+          perPage: 30,
+          perPageDropdown: [10, 20, 30, 50, 80, 100],
+          dropdownAllowAll: true
         }"
       />
     </div>
@@ -34,24 +41,13 @@ export default {
       timer: null,
       isDark: false,
       columns: [
-        {
-          label: 'Method',
-          field: 'method'
-        },
-        {
-          label: 'Path',
-          field: 'path'
-        },
-        {
-          label: 'Requests',
-          field: 'requests',
-          type: 'number'
-        },
-        {
-          label: 'Errors',
-          field: 'errors',
-          type: 'number'
-        }
+        { label: 'Method', field: 'method' },
+        { label: 'Path', field: 'path' },
+        { label: 'Requests', field: 'requests', type: 'number', tdClass: 'text-weight-bold' },
+        { label: 'Responses', field: 'responses', type: 'number' },
+        { label: 'Errors', field: 'errors', type: 'number' },
+        { label: 'Req rate', field: 'req_rate', type: 'number', formatFn: this.formatToFixed2 },
+        { label: 'Err rate', field: 'err_rate', type: 'number', formatFn: this.formatToFixed2 }
       ],
       rows: [],
       dbdata: new DbData(),
@@ -111,20 +107,21 @@ export default {
       this.dbdata.setWData('w5', { value: 0 });
       this.dbdata.setWData('w6', { value: 0 });
     },
-
     // TODO Reconsider
     loadStats: function() {
       this.timer = setTimeout(() => {
         this.getStats({ fields: ['apistats'] });
       }, 1000);
     },
-
+    formatToFixed2: function(value) {
+      return value.toFixed(2);
+    },
     updateStats: function() {
       // Update numbers
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
       this.rows = statsContainer.getApiStatsArray();
 
-      this.loadStats();
+      //this.loadStats();
     }
   }
 };
