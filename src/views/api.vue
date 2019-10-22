@@ -5,7 +5,7 @@
       <vue-good-table
         :columns="columns"
         :rows="rows"
-        styleClass="vgt-table condensed bordered striped"
+        styleClass="vgt-table condensed bordered striped sws-table"
         :search-options="{
           enabled: true,
           skipDiacritics: true
@@ -17,7 +17,17 @@
           perPageDropdown: [10, 20, 30, 50, 80, 100],
           dropdownAllowAll: true
         }"
-      />
+      >
+        <template slot="table-row" slot-scope="props">
+          <span v-if="props.column.field == 'path'">
+            <!--<span style="font-weight: bold; color: blue;">{{ props.row.path }}</span>-->
+            <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.path } }">{{ props.row.path }}</router-link>
+          </span>
+          <span v-else>
+            {{ props.formattedRow[props.column.field] }}
+          </span>
+        </template>
+      </vue-good-table>
     </div>
   </q-page>
 </template>
@@ -41,13 +51,23 @@ export default {
       timer: null,
       isDark: false,
       columns: [
-        { label: 'Method', field: 'method' },
-        { label: 'Path', field: 'path' },
+        { label: 'Method', field: 'method', tdClass: 'text-weight-bold' },
+        { label: 'Path', field: 'path', tdClass: 'text-weight-bold' },
         { label: 'Requests', field: 'requests', type: 'number', tdClass: 'text-weight-bold' },
         { label: 'Responses', field: 'responses', type: 'number' },
-        { label: 'Errors', field: 'errors', type: 'number' },
+        { label: 'Apdex Score', field: 'apdex_score', type: 'number', formatFn: this.formatToFixed2, tdClass: this.tdClassApdex },
+        { label: 'Errors', field: 'errors', type: 'number', tdClass: this.tdClassErrors },
         { label: 'Req rate', field: 'req_rate', type: 'number', formatFn: this.formatToFixed2 },
-        { label: 'Err rate', field: 'err_rate', type: 'number', formatFn: this.formatToFixed2 }
+        { label: 'Err rate', field: 'err_rate', type: 'number', formatFn: this.formatToFixed2, tdClass: this.tdClassErrRate },
+        { label: 'Success', field: 'success', type: 'number' },
+        { label: 'Redirect', field: 'redirect', type: 'number' },
+        { label: 'Client Error', field: 'client_error', type: 'number', tdClass: this.tdClassCErr },
+        { label: 'Server Error', field: 'server_error', type: 'number', tdClass: this.tdClassSErr },
+        { label: 'Max Time (ms)', field: 'max_time', type: 'number' },
+        { label: 'Avg Time (ms)', field: 'avg_time', type: 'number', formatFn: this.formatToFixed2 },
+        { label: 'Avg Req Size', field: 'avg_req_clength', type: 'number', formatFn: this.formatToFixed0 },
+        { label: 'Avg Res Size', field: 'avg_res_clength', type: 'number', formatFn: this.formatToFixed0 },
+        { label: 'Tags', field: 'tags', type: 'string' }
       ],
       rows: [],
       dbdata: new DbData(),
@@ -91,7 +111,7 @@ export default {
   },
   mounted() {
     this.initialize();
-    this.getStats({ fields: ['apistats'] });
+    this.getStats({ fields: ['apidefs', 'apistats'] });
     this.ready = true;
   },
   methods: {
@@ -115,6 +135,24 @@ export default {
     },
     formatToFixed2: function(value) {
       return value.toFixed(2);
+    },
+    formatToFixed0: function(value) {
+      return value.toFixed(0);
+    },
+    tdClassErrors(row) {
+      return row.errors > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
+    },
+    tdClassErrRate(row) {
+      return row.err_rate > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
+    },
+    tdClassCErr(row) {
+      return row.client_error > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
+    },
+    tdClassSErr(row) {
+      return row.server_error > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
+    },
+    tdClassApdex(row) {
+      return 'text-weight-bold ' + (row.apdex_score < 0.6 ? 'sws-td-badge sws-td-badge-warn' : '');
     },
     updateStats: function() {
       // Update numbers

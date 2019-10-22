@@ -13,12 +13,13 @@ class StatsContainer {
 
   getApiStatsArray() {
     let res = [];
-    let apiSettings = pathOr(null, ['apistats'], this);
-    if (!apiSettings) {
+    let apiStats = pathOr(null, ['apistats'], this);
+    let apiDefs = pathOr(null, ['apidefs'], this);
+    if (!apiStats) {
       return res;
     }
-    for (let apiPath of Object.keys(apiSettings)) {
-      let apiMethods = apiSettings[apiPath];
+    for (let apiPath of Object.keys(apiStats)) {
+      let apiMethods = apiStats[apiPath];
       for (let apiMethod of Object.keys(apiMethods)) {
         res.push(
           Object.assign(
@@ -26,7 +27,10 @@ class StatsContainer {
               path: apiPath,
               method: apiMethod
             },
-            apiMethods[apiMethod]
+            apiMethods[apiMethod],
+            {
+              tags: pathOr([], [apiPath, apiMethod, 'tags'], apiDefs).join(',')
+            }
           )
         );
       }

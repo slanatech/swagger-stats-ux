@@ -1,3 +1,33 @@
 @import './quasar.variables'
 @import '~quasar-styl'
 // @import '~quasar-addon-styl'
+
+a {
+  color: $primary;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $primary;
+  text-decoration: underline;
+}
+
+table.vgt-table.sws-table {
+ font-size: 14px;
+}
+
+.sws-td-badge span {
+  border-radius: 8px;
+  padding: 2px 6px;
+  color: white;
+}
+.sws-td-badge-neg span {
+  background-color: $negative;
+  opacity: 0.6;
+}
+
+.sws-td-badge-warn span {
+  background-color: $warning;
+  opacity: 0.7;
+  color: black;
+}
