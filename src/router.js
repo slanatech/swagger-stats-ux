@@ -6,6 +6,7 @@ import About from './views/About.vue';
 import Summary from './views/summary.vue';
 import Rates from './views/rates.vue';
 import Api from './views/api.vue';
+import Requests from './views/requests.vue';
 import Horizon from './views/horizon.vue';
 
 Vue.use(Router);
@@ -30,6 +31,11 @@ export default new Router({
           path: '/rates',
           name: 'rates',
           component: Rates
+        },
+        {
+          path: '/requests',
+          name: 'requests',
+          component: Requests
         },
         {
           path: '/api',

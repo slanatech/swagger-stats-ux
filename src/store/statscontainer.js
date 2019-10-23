@@ -38,6 +38,25 @@ class StatsContainer {
     return res;
   }
 
+  getMethodStatsArray() {
+    let res = [];
+    let allMethodStats = pathOr(null, ['method'], this);
+    if (!allMethodStats) {
+      return res;
+    }
+    for (let methodName of Object.keys(allMethodStats)) {
+      res.push(
+        Object.assign(
+          {
+            method: methodName
+          },
+          allMethodStats[methodName]
+        )
+      );
+    }
+    return res;
+  }
+
   getCurrentTimelineBucket() {
     let timelineSettings = pathOr(null, ['timeline', 'settings'], this);
     let timelineData = pathOr(null, ['timeline', 'data'], this);
