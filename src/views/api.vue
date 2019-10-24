@@ -40,12 +40,14 @@ import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
+import { vgtMethods } from '../mixins/vgtmethods';
 
 export default {
   name: 'ApiView',
   components: {
     DbDashboard
   },
+  mixins: [vgtMethods],
   data() {
     return {
       timer: null,
@@ -132,27 +134,6 @@ export default {
       this.timer = setTimeout(() => {
         this.getStats({ fields: ['apistats'] });
       }, 1000);
-    },
-    formatToFixed2: function(value) {
-      return value.toFixed(2);
-    },
-    formatToFixed0: function(value) {
-      return value.toFixed(0);
-    },
-    tdClassErrors(row) {
-      return row.errors > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassErrRate(row) {
-      return row.err_rate > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassCErr(row) {
-      return row.client_error > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassSErr(row) {
-      return row.server_error > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassApdex(row) {
-      return 'text-weight-bold ' + (row.apdex_score < 0.6 ? 'sws-td-badge sws-td-badge-warn' : '');
     },
     updateStats: function() {
       // Update numbers

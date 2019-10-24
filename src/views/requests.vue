@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div style="padding: 4px;">
+    <div style="padding: 4px;margin-bottom: 16px;">
       <vue-good-table :columns="columns" :rows="rows" styleClass="vgt-table condensed bordered striped sws-table"> </vue-good-table>
     </div>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
@@ -15,12 +15,14 @@ import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
+import { vgtMethods } from '../mixins/vgtmethods';
 
 export default {
   name: 'ApiView',
   components: {
     DbDashboard
   },
+  mixins: [vgtMethods],
   data() {
     return {
       timer: null,
@@ -40,8 +42,7 @@ export default {
         { label: 'Max Time (ms)', field: 'max_time', type: 'number' },
         { label: 'Avg Time (ms)', field: 'avg_time', type: 'number', formatFn: this.formatToFixed2 },
         { label: 'Avg Req Size', field: 'avg_req_clength', type: 'number', formatFn: this.formatToFixed0 },
-        { label: 'Avg Res Size', field: 'avg_res_clength', type: 'number', formatFn: this.formatToFixed0 },
-        { label: 'Tags', field: 'tags', type: 'string' }
+        { label: 'Avg Res Size', field: 'avg_res_clength', type: 'number', formatFn: this.formatToFixed0 }
       ],
       rows: [],
       dbdata: new DbData(),
@@ -52,35 +53,83 @@ export default {
         },
         // prettier-ignore
         widgets: [
-          { id: 'w1', type: 'DbNumber', cspan: 2, properties: {
-              title: 'Current Apdex Score', subtitle: 'Apdex Score', total: 1, trendMax: 1, format: '%.2f',
-              percentRanges: [
-                { value: 50, color: 'red'},
-                { value: 60, color: 'orange'},
-                { value: 100, color: 'green'},
-              ]}
-          },
-          { id: 'w2', type: 'DbNumber', cspan: 2, properties: { title: 'Current Req Rate', subtitle: 'Requests per second', format: '%.2f', icon: 'fa fa-exchange-alt' } },
-          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Current Err Rate', subtitle: 'Errors per second', format: '%.2f' } },
-          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Current Max HT', subtitle: 'Max Handle Time', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'Current Avg HT', subtitle: 'Avg Handle Time', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'OPA', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
+          { id: 'w1', type: 'DbNumber', cspan: 3, properties: { title: 'GET', subtitle: 'GET Requests' } },
+          { id: 'w2', type: 'DbNumber', cspan: 3, properties: { title: 'POST', subtitle: 'POST Requests' } },
+          { id: 'w3', type: 'DbNumber', cspan: 3, properties: { title: 'PUT', subtitle: 'PUT Requests' } },
+          { id: 'w4', type: 'DbNumber', cspan: 3, properties: { title: 'DELETE', subtitle: 'DELETE Requests' } },
           {
             id: 'w23',
-            type: 'DbChartjsPie',
+            type: 'DbChartjsDoughnut',
             cspan: 4,
-            height: 250
+            height: 250,
+            properties: {
+              options: {
+                title: {display: true, text: 'Requests by method', position: 'top'},
+                legend: { position: 'right' }
+              }
+            }
           },
           {
             id: 'w24',
-            type: 'DbChartjsBar',
+            type: 'DbChartjsDoughnut',
             cspan: 4,
-            height: 250
+            height: 250,
+            properties: {
+              options: {
+                title: {display: true, text: 'Errors by method', position: 'top'},
+                legend: { position: 'right' }
+              }
+            }
           },
           {
             id: 'w25',
             type: 'DbChartjsBar',
-            cspan: 4
+            cspan: 4,
+            height: 250,
+            properties: {
+              options: {
+                title: { display: true, text: 'Apdex Score', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}}
+              }
+            }
+          },
+          {
+            id: 'w26',
+            type: 'DbChartjsBar',
+            cspan: 4,
+            height: 250,
+            properties: {
+              options: {
+                title: { display: true, text: 'Request Rate', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}}
+              }
+            }
+          },
+          {
+            id: 'w27',
+            type: 'DbChartjsBar',
+            cspan: 4,
+            properties: {
+              options: {
+                title: { display: true, text: 'Error Rate', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}}
+              }
+            }
+          },
+          {
+            id: 'w28',
+            type: 'DbChartjsBar',
+            cspan: 4,
+            properties: {
+              options: {
+                title: { display: true, text: 'Avg Handle Time', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}}
+              }
+            }
           }
         ]
       },
@@ -111,19 +160,17 @@ export default {
     }),
     initialize: function() {
       // Init dashboard data
-      this.dbdata.setWData('w1', { value: 0 });
-      this.dbdata.setWData('w2', { value: 0 });
-      this.dbdata.setWData('w3', { value: 0 });
-      this.dbdata.setWData('w4', { value: 0 });
-      this.dbdata.setWData('w5', { value: 0 });
-      this.dbdata.setWData('w6', { value: 0 });
+      this.dbdata.setWData('w1', { value: 0, total:0 });
+      this.dbdata.setWData('w2', { value: 0, total:0 });
+      this.dbdata.setWData('w3', { value: 0, total:0 });
+      this.dbdata.setWData('w4', { value: 0, total:0 });
 
-      this.dbdata.setWData('w23', {
-        data: {
-          labels: [],
-          datasets: [{ label: 'Requests by method', data: [] }]
-        }
-      });
+      this.dbdata.setWData('w23', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w24', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w25', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w26', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w27', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w28', { data: { labels: [], datasets: [{ data: [] }] } });
     },
     // TODO Reconsider
     loadStats: function() {
@@ -131,36 +178,41 @@ export default {
         this.getStats({ fields: ['method'] });
       }, 1000);
     },
-    // TODO ->> to mixin
-    formatToFixed2: function(value) {
-      return value.toFixed(2);
-    },
-    formatToFixed0: function(value) {
-      return value.toFixed(0);
-    },
-    tdClassErrors(row) {
-      return row.errors > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassErrRate(row) {
-      return row.err_rate > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassCErr(row) {
-      return row.client_error > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassSErr(row) {
-      return row.server_error > 0 ? 'sws-td-badge sws-td-badge-neg' : '';
-    },
-    tdClassApdex(row) {
-      return 'text-weight-bold ' + (row.apdex_score < 0.6 ? 'sws-td-badge sws-td-badge-warn' : '');
-    },
     updateStats: function() {
       // Update table
       this.rows = statsContainer.getMethodStatsArray();
+      let totalRequests = pathOr(0,['all','requests'],statsContainer);
+      this.dbdata.setWData('w1', { value: pathOr(0,['method','GET','requests'],statsContainer), total:totalRequests });
+      this.dbdata.setWData('w2', { value: pathOr(0,['method','POST','requests'],statsContainer), total:totalRequests });
+      this.dbdata.setWData('w3', { value: pathOr(0,['method','PUT','requests'],statsContainer), total:totalRequests });
+      this.dbdata.setWData('w4', { value: pathOr(0,['method','DELETE','requests'],statsContainer), total:totalRequests });
 
-      let labelsRBM = Object.keys(pathOr({}, ['method'], statsContainer));
-      this.dbdata['w23'].data.labels = labelsRBM;
-      this.dbdata['w23'].data.datasets[0].data = labelsRBM.map(x => statsContainer.method[x].requests);
+      let allMethods = Object.keys(pathOr({}, ['method'], statsContainer));
+      this.dbdata['w23'].data.labels = allMethods;
+      this.dbdata['w23'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].requests);
       this.dbdata.touch('w23');
+
+      this.dbdata['w24'].data.labels = allMethods;
+      this.dbdata['w24'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].errors);
+      this.dbdata.touch('w24');
+
+      this.dbdata['w25'].data.labels = allMethods;
+      this.dbdata['w25'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].apdex_score);
+      this.dbdata.touch('w25');
+
+      this.dbdata['w26'].data.labels = allMethods;
+      this.dbdata['w26'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].req_rate);
+      this.dbdata.touch('w26');
+
+      this.dbdata['w27'].data.labels = allMethods;
+      this.dbdata['w27'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].err_rate);
+      this.dbdata.touch('w27');
+
+      this.dbdata['w28'].data.labels = allMethods;
+      this.dbdata['w28'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].avg_time);
+      this.dbdata.touch('w28');
+
+      this.loadStats();
     }
   }
 };
