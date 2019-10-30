@@ -20,6 +20,10 @@
             }"
           >
             <template slot="table-row" slot-scope="props">
+              <span v-if="props.column.field == 'expand'">
+                <!--<q-icon name="visibility" />-->
+                <q-btn flat round color="secondary" icon="play_arrow" size="xs" @click="handleShow(props.row.originalIndex)" />
+              </span>
               <span v-if="props.column.field == 'api.path'">
                 <!--<span style="font-weight: bold; color: blue;">{{ props.row.path }}</span>-->
                 <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.api.path } }">{{ props.row.api.path }}</router-link>
@@ -33,8 +37,16 @@
       </template>
 
       <template v-slot:after>
-        <div class="q-pa-md">
-          <pre><code ref="code" class="language-json"></code></pre>
+        <div class="q-pa-xs">
+          <q-list bordered class="rounded-borders">
+            <q-expansion-item expand-separator icon="perm_identity" label="Account settings" caption="John Doe">
+              <q-card>
+                <q-card-section>
+                  <pre><code ref="code" class="language-json"></code></pre>
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+          </q-list>
         </div>
       </template>
     </q-splitter>
@@ -57,16 +69,26 @@ export default {
   mixins: [vgtMethods],
   data() {
     return {
-      splitterModel: 60, // start at 50%
+      splitterModel: 100, // start at 50%
       timer: null,
       isDark: false,
       columns: [
-        { label: 'Time', field: '@timestamp', tdClass: 'text-body2', type: 'date', dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSX", dateOutputFormat: 'LLL do yyyy, HH:mm:ss.SSS' },
-        { label: 'Method', field: 'method', tdClass: 'text-weight-bold' },
-        { label: 'Path', field: 'api.path', tdClass: 'text-weight-bold' },
-        { label: 'URL', field: 'http.request.url' },
-        { label: 'Response Time', field: 'responsetime', type: 'number', tdClass: 'text-weight-bold' },
-        { label: 'Response Code', field: 'http.response.code', type: 'number', tdClass: 'text-weight-bold' }
+        { label: '', field: 'expand', width: '1%', tdClass: 'text-center pointer' },
+        {
+          label: 'Time',
+          field: '@timestamp',
+          width: '10%',
+          thClass: 'text-left',
+          tdClass: 'nowrap text-left text-body2',
+          type: 'date',
+          dateInputFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSX",
+          dateOutputFormat: 'LLL do yyyy, HH:mm:ss.SSS'
+        },
+        { label: 'Method', field: 'method', width: '10%', tdClass: 'text-weight-bold' },
+        { label: 'Path', field: 'api.path', width: '30%', tdClass: 'text-weight-bold' },
+        { label: 'URL', field: 'http.request.url', width: '39%' },
+        { label: 'Response Time', field: 'responsetime', width: '5%', type: 'number', tdClass: 'text-weight-bold' },
+        { label: 'Response Code', field: 'http.response.code', width: '5%', type: 'number', tdClass: 'text-weight-bold' }
       ],
       rows: [],
       requestResponseRecord: '',
@@ -100,6 +122,12 @@ export default {
     preRender: function(code) {
       return code.replace(/\s+data-v-\S+="[^"]*"/g, '');
     },
+    handleShow(rowIndex) {
+      console.log(`Index: ${rowIndex}`);
+      this.requestResponseRecord = JSON.stringify(this.rows[rowIndex], null, '\t');
+      this.$refs.code.textContent = this.preRender(this.requestResponseRecord, this);
+      Prism.highlightElement(this.$refs.code);
+    },
     // TODO Reconsider
     loadStats: function() {
       this.timer = setTimeout(() => {
@@ -111,11 +139,6 @@ export default {
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
       this.rows = pathOr([], ['lasterrors'], statsContainer);
 
-      this.requestResponseRecord = JSON.stringify(this.rows[0], null, '\t');
-
-      //this.loadStats();
-      this.$refs.code.textContent = this.preRender(this.requestResponseRecord, this);
-      Prism.highlightElement(this.$refs.code);
       //Prism.highlightAll();
     }
   }
