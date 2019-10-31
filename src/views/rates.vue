@@ -43,7 +43,7 @@ export default {
           { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Current Err Rate', subtitle: 'Errors per second', format: '%.2f' } },
           { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Current Max HT', subtitle: 'Max Handle Time', format: '%.2f', icon: 'fa fa-exclamation' } },
           { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'Current Avg HT', subtitle: 'Avg Handle Time', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'OPA', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
+          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Current Lag', subtitle: 'Current Event Loop Lag', format: '%.3f ms',icon: 'fa fa-hourglass-half' } },
 
           { id: 'w7', type: 'DbNumber', cspan: 2, properties: {
               title: 'Overall Apdex Score', subtitle: 'Apdex Score of all time', total: 1, trendMax: 1, format: '%.2f',
@@ -57,7 +57,7 @@ export default {
           { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: 'Overall Err Rate', subtitle: 'Err rate of all time', format: '%.2f' } },
           { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: 'Overall Max HT', subtitle: 'Max Handle Time of all time', format: '%.2f', icon: 'fa fa-exclamation' } },
           { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: 'Overall Avg HT', subtitle: 'Avg Handle Time of all time', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'OPA', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
+          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Overall Max Lag', subtitle: 'Max Observed Event Loop Lag', format: '%.3f ms',icon: 'fa fa-hourglass-half' } },
 
           {
             id: 'w14',
@@ -265,6 +265,7 @@ export default {
       this.dbdata.setWData('w3', { value: errRate, trend: trendsData[2], total: requestRate, trendMax: reqRateTrendMax });
       this.dbdata.setWData('w4', { value: maxHT, trend: trendsData[3] });
       this.dbdata.setWData('w5', { value: avgHT, trend: trendsData[4], trendMax: mahHTTrendMax });
+      this.dbdata.setWData('w6', { value: pathOr(0, ['sys', 'lag'], statsContainer) });
 
       let overallReqRate = pathOr(0, ['all', 'req_rate'], statsContainer);
       this.dbdata.setWData('w7', { value: pathOr(0, ['all', 'apdex_score'], statsContainer) });
@@ -272,7 +273,7 @@ export default {
       this.dbdata.setWData('w9', { value: pathOr(0, ['all', 'err_rate'], statsContainer), total: overallReqRate });
       this.dbdata.setWData('w10', { value: pathOr(0, ['all', 'max_time'], statsContainer) });
       this.dbdata.setWData('w11', { value: pathOr(0, ['all', 'avg_time'], statsContainer) });
-      this.dbdata.setWData('w12', { value: avgHT, trend: trendsData[11] });
+      this.dbdata.setWData('w12', { value: pathOr(0, ['sys', 'maxlag'], statsContainer) });
 
       this.dbdata.setWData('w14', { data: asData });
       this.dbdata.setWData('w15', { data: reqErrTrendData });

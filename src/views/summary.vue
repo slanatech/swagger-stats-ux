@@ -72,6 +72,20 @@ export default {
             }
           },
           {
+            id: 'w17',
+            type: 'DbDygraphsLine',
+            cspan: 12,
+            height: 140,
+            properties: {
+              options: {
+                stackedGraph: false,
+                title: 'Event Loop Lag',
+                ylabel: 'msec',
+                labels: ['Date','Lag']
+              }
+            }
+          },
+          {
             id: 'w15',
             type: 'DbDygraphsLine',
             cspan: 12,
@@ -144,6 +158,7 @@ export default {
       this.dbdata.setWData('w14', { data: [] });
       this.dbdata.setWData('w15', { data: [] });
       this.dbdata.setWData('w16', { data: [] });
+      this.dbdata.setWData('w17', { data: [] });
     },
 
     // TODO Reconsider
@@ -161,6 +176,7 @@ export default {
       let dthData = [];
       let cpuData = [];
       let memData = [];
+      let lagData = [];
 
       let timelineSorted = statsContainer.getSortedTimeline();
       //let trendReqData =  [];
@@ -178,6 +194,7 @@ export default {
           pathOr(0, ['sys', 'heapTotal'], entry) / 1048576,
           pathOr(0, ['sys', 'heapUsed'], entry) / 1048576
         ]);
+        lagData.push([new Date(entry.ts), pathOr(0, ['sys', 'lag'], entry)]);
         // Trends
         trendsData[0].push(pathOr(0, ['stats', 'requests'], entry));
         trendsData[1].push(pathOr(0, ['stats', 'apdex_score'], entry));
@@ -218,6 +235,7 @@ export default {
       this.dbdata.setWData('w14', { data: cpuData });
       this.dbdata.setWData('w15', { data: memData });
       this.dbdata.setWData('w16', { data: dthData });
+      this.dbdata.setWData('w17', { data: lagData });
 
       this.loadStats();
     },
