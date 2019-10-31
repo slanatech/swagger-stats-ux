@@ -38,11 +38,11 @@
 
       <template v-slot:after>
         <div class="q-pa-xs">
-          <q-list bordered class="rounded-borders">
-            <q-expansion-item expand-separator icon="perm_identity" label="Account settings" caption="John Doe">
+          <q-list v-for="rrr in storedLastErrors" bordered class="rounded-borders">
+            <q-expansion-item expand-separator icon="perm_identity" :label="`${rrr.method} ${rrr.path}`" :caption="rrr['@timestamp']">
               <q-card>
                 <q-card-section>
-                  <pre><code ref="code" class="language-json"></code></pre>
+                  <pre><code class="language-json">{{JSON.stringify(rrr,null,'\t')}}</code></pre>
                 </q-card-section>
               </q-card>
             </q-expansion-item>
@@ -97,7 +97,8 @@ export default {
   },
   computed: {
     ...mapState({
-      statsUpdated: state => state.stats.updated
+      statsUpdated: state => state.stats.updated,
+      storedLastErrors: state => state.lasterrors.errors
     })
   },
   watch: {
@@ -105,6 +106,11 @@ export default {
       handler: function() {
         console.log(`stats updated`);
         this.updateStats();
+      }
+    },
+    storedLastErrors: {
+      handler: function() {
+        console.log(`storedLastErrors updated!`);
       }
     }
   },
@@ -116,7 +122,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
+      getStats: 'stats/getStats', // map `this.getStats()` to `... dispatch('getStats')`
+      addErrorRRR: 'lasterrors/add'
     }),
     initialize: function() {},
     preRender: function(code) {
@@ -125,8 +132,9 @@ export default {
     handleShow(rowIndex) {
       console.log(`Index: ${rowIndex}`);
       this.requestResponseRecord = JSON.stringify(this.rows[rowIndex], null, '\t');
-      this.$refs.code.textContent = this.preRender(this.requestResponseRecord, this);
-      Prism.highlightElement(this.$refs.code);
+      this.addErrorRRR({ rrr: this.rows[rowIndex] });
+      //this.$refs.code.textContent = this.preRender(this.requestResponseRecord, this);
+      //Prism.highlightElement(this.$refs.code);
     },
     // TODO Reconsider
     loadStats: function() {
