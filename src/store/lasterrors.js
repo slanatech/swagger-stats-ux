@@ -8,7 +8,7 @@ const getters = {};
 
 const mutations = {
   ADD(state, { rrr }) {
-    state.errors.push(rrr);
+    state.errors.unshift(rrr);
   },
   REMOVE(state, { index }) {
     state.errors.splice(index, 1);
@@ -16,8 +16,11 @@ const mutations = {
 };
 
 const actions = {
-  async add({ commit }, { rrr }) {
+  add({ commit }, { rrr }) {
     commit('ADD', { rrr: rrr });
+  },
+  remove({ commit }, { index }) {
+    commit('REMOVE', { index: index });
   }
 };
 

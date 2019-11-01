@@ -56,7 +56,7 @@ export default {
           { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: '3XX', subtitle: 'Redirect Responses' } },
           { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: '4XX', subtitle: 'Client Error Responses' } },
           { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: '5XX', subtitle: 'Server Error Responses' } },
-          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Current Lag', subtitle: 'Current Event Loop Lag', format: '%.3f ms',icon: 'fa fa-hourglass-half' } },
+          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Event Loop Lag', subtitle: 'Current Event Loop Lag', format: '%.3f ms',icon: 'fa fa-hourglass-half' } },
           {
             id: 'w14',
             type: 'DbDygraphsLine',

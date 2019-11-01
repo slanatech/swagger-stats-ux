@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-splitter v-model="splitterModel" :limits="[50, 100]">
+    <q-splitter v-model="splitterModel" :limits="[50, 100]" after-class="q-splitter-panel-height-auto">
       <template v-slot:before>
         <div style="padding: 4px;">
           <vue-good-table
@@ -37,16 +37,35 @@
       </template>
 
       <template v-slot:after>
-        <div class="q-pa-xs">
-          <q-list v-for="rrr in storedLastErrors" bordered class="rounded-borders">
-            <q-expansion-item expand-separator icon="perm_identity" :label="`${rrr.method} ${rrr.path}`" :caption="rrr['@timestamp']">
-              <q-card>
-                <q-card-section>
-                  <pre><code class="language-json">{{JSON.stringify(rrr,null,'\t')}}</code></pre>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-          </q-list>
+        <div class="q-pa-xs full-height">
+          <q-scroll-area class="full-height">
+            <q-list bordered class="rounded-borders">
+              <div v-for="(rrr, index) in storedLastErrors" v-bind:key="rrr.path + '.' + rrr.startts">
+                <q-expansion-item>
+                  <template v-slot:header>
+                    <q-item-section avatar>
+                      <q-avatar icon="sync_alt" color="accent" text-color="white" />
+                    </q-item-section>
+
+                    <q-item-section>
+                      <div>{{ rrr.method + ' ' + rrr.path }}</div>
+                      <div class="text-caption">{{ rrr['@timestamp'] }}</div>
+                    </q-item-section>
+
+                    <q-item-section side>
+                      <q-btn flat round icon="clear" size="sm" v-on:click.stop="handleClear(index)" />
+                    </q-item-section>
+                  </template>
+                  <q-card>
+                    <q-card-section>
+                      <pre><code class="language-json">{{JSON.stringify(rrr,null,'\t')}}</code></pre>
+                    </q-card-section>
+                  </q-card>
+                </q-expansion-item>
+                <q-separator />
+              </div>
+            </q-list>
+          </q-scroll-area>
         </div>
       </template>
     </q-splitter>
@@ -59,8 +78,8 @@ import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import { vgtMethods } from '../mixins/vgtmethods';
 import Prism from 'prismjs';
-//import 'prismjs/themes/prism.css';
-import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/themes/prism.css';
+//import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-json';
 
 export default {
@@ -110,7 +129,16 @@ export default {
     },
     storedLastErrors: {
       handler: function() {
-        console.log(`storedLastErrors updated!`);
+        if (this.storedLastErrors.length > 0) {
+          if (this.splitterModel === 100) {
+            this.splitterModel = 60;
+          }
+        } else {
+          this.splitterModel = 100;
+        }
+        this.$nextTick(() => {
+          Prism.highlightAll();
+        });
       }
     }
   },
@@ -120,21 +148,23 @@ export default {
     this.getStats({ fields: ['lasterrors'] });
     this.ready = true;
   },
+  updated: function() {
+    //Prism.highlightAll();
+  },
   methods: {
     ...mapActions({
       getStats: 'stats/getStats', // map `this.getStats()` to `... dispatch('getStats')`
-      addErrorRRR: 'lasterrors/add'
+      addErrorRRR: 'lasterrors/add',
+      removeErrorRRR: 'lasterrors/remove'
     }),
     initialize: function() {},
-    preRender: function(code) {
-      return code.replace(/\s+data-v-\S+="[^"]*"/g, '');
-    },
     handleShow(rowIndex) {
       console.log(`Index: ${rowIndex}`);
-      this.requestResponseRecord = JSON.stringify(this.rows[rowIndex], null, '\t');
       this.addErrorRRR({ rrr: this.rows[rowIndex] });
-      //this.$refs.code.textContent = this.preRender(this.requestResponseRecord, this);
-      //Prism.highlightElement(this.$refs.code);
+    },
+    handleClear(index) {
+      console.log(`Clear invoked: ${index}`);
+      this.removeErrorRRR({ index: index });
     },
     // TODO Reconsider
     loadStats: function() {
@@ -146,8 +176,6 @@ export default {
       // Update numbers
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
       this.rows = pathOr([], ['lasterrors'], statsContainer);
-
-      //Prism.highlightAll();
     }
   }
 };
