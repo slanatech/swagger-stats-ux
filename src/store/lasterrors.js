@@ -8,22 +8,26 @@ const state = {
 const getters = {};
 
 const mutations = {
-  ADD(state, { rrr }) {
-    state.expanded.unshift(true);
-    state.items.unshift(rrr);
+  ADD(state, { key, data }) {
+    state.items.unshift({ key: key, data: data });
   },
   REMOVE(state, { index }) {
-    state.expanded.splice(index, 1);
     state.items.splice(index, 1);
+  },
+  SET_EXPANDED(state, { expanded }) {
+    state.expanded = [...expanded];
   }
 };
 
 const actions = {
-  add({ commit }, { rrr }) {
-    commit('ADD', { rrr: rrr });
+  add({ commit }, { key, data }) {
+    commit('ADD', { key: key, data: data });
   },
   remove({ commit }, { index }) {
     commit('REMOVE', { index: index });
+  },
+  setExpanded({ commit }, { expanded }) {
+    commit('SET_EXPANDED', { expanded: expanded });
   }
 };
 

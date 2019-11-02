@@ -38,9 +38,9 @@
 
       <template v-slot:after>
         <div class="q-pa-xs full-height">
-          <q-scroll-area class="full-height">
+          <q-scroll-area ref="scrollArea" class="full-height">
             <q-list bordered class="rounded-borders">
-              <div v-for="(rrr, index) in storedLastErrors" v-bind:key="rrr.path + '.' + rrr.startts">
+              <div v-for="(item, index) in storedLastErrors" v-bind:key="item.key" :id="item.key">
                 <q-expansion-item v-model="expanded[index]">
                   <template v-slot:header>
                     <q-item-section avatar>
@@ -48,8 +48,8 @@
                     </q-item-section>
 
                     <q-item-section>
-                      <div>{{ rrr.method + ' ' + rrr.path }}</div>
-                      <div class="text-caption">{{ rrr['@timestamp'] }}</div>
+                      <div>{{ item.data.method + ' ' + item.data.path }}</div>
+                      <div class="text-caption">{{ item.data['@timestamp'] }}</div>
                     </q-item-section>
 
                     <q-item-section side>
@@ -58,7 +58,7 @@
                   </template>
                   <q-card>
                     <q-card-section>
-                      <pre><code class="language-json">{{JSON.stringify(rrr,null,'\t')}}</code></pre>
+                      <pre><code class="language-json">{{JSON.stringify(item.data,null,'\t')}}</code></pre>
                     </q-card-section>
                   </q-card>
                 </q-expansion-item>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { pathOr } from 'ramda';
+import { pathOr, propEq, findIndex } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import { vgtMethods } from '../mixins/vgtmethods';
@@ -111,8 +111,7 @@ export default {
         { label: 'Response Code', field: 'http.response.code', width: '5%', type: 'number', tdClass: 'text-weight-bold' }
       ],
       rows: [],
-      requestResponseRecord: '',
-      ready: false
+      requestResponseRecord: ''
     };
   },
   computed: {
@@ -127,11 +126,6 @@ export default {
       handler: function() {
         console.log(`stats updated`);
         this.updateStats();
-      }
-    },
-    expanded: {
-      handler: function() {
-        console.log(`Expanded updated!`);
       }
     },
     storedLastErrors: {
@@ -153,28 +147,53 @@ export default {
     Prism.manual = true;
     this.initialize();
     this.getStats({ fields: ['lasterrors'] });
-    this.ready = true;
-    this.expanded = this.expandedState;
+    this.splitterModel = this.storedLastErrors.length > 0 ? 60 : 100;
+    // Retrieve expanded state
+    this.expanded = [...this.expandedState];
   },
   updated: function() {
     this.$nextTick(() => {
       Prism.highlightAll();
     });
   },
+  beforeDestroy: function() {
+    // Store expanded state
+    this.setExpanded({ expanded: this.expanded });
+  },
   methods: {
     ...mapActions({
       getStats: 'stats/getStats', // map `this.getStats()` to `... dispatch('getStats')`
       addErrorRRR: 'lasterrors/add',
-      removeErrorRRR: 'lasterrors/remove'
+      removeErrorRRR: 'lasterrors/remove',
+      setExpanded: 'lasterrors/setExpanded'
     }),
     initialize: function() {},
+    getKey(rrr) {
+      return rrr.path + '.' + rrr.startts;
+    },
     handleShow(rowIndex) {
-      console.log(`Index: ${rowIndex}`);
-      this.expanded.unshift(true);
-      this.addErrorRRR({ rrr: this.rows[rowIndex] });
+      let item = this.rows[rowIndex];
+      let key = this.getKey(item);
+      let exists = findIndex(propEq('key', key))(this.storedLastErrors);
+      if (exists >= 0) {
+        // Expand & Scroll to item already shown
+        let child = document.getElementById(key);
+        if (this.expanded[exists]) {
+          this.$refs.scrollArea.setScrollPosition(child.offsetTop, 500);
+        } else {
+          this.$set(this.expanded, exists, true);
+          // need to wait a bit till it fully expands
+          setTimeout(() => {
+            this.$refs.scrollArea.setScrollPosition(child.offsetTop, 500);
+          }, 500);
+        }
+      } else {
+        this.expanded.unshift(true);
+        this.addErrorRRR({ key: key, data: item });
+        //this.$refs.scrollArea.setScrollPosition(0);
+      }
     },
     handleClear(index) {
-      console.log(`Clear invoked: ${index}`);
       this.expanded.splice(index, 1);
       this.removeErrorRRR({ index: index });
     },
