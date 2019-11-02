@@ -1,17 +1,20 @@
 /* Collection of Request Response Records captured for detailed view in UI
  */
 const state = {
-  errors: []
+  items: [],
+  expanded: []
 };
 
 const getters = {};
 
 const mutations = {
   ADD(state, { rrr }) {
-    state.errors.unshift(rrr);
+    state.expanded.unshift(true);
+    state.items.unshift(rrr);
   },
   REMOVE(state, { index }) {
-    state.errors.splice(index, 1);
+    state.expanded.splice(index, 1);
+    state.items.splice(index, 1);
   }
 };
 

@@ -41,7 +41,7 @@
           <q-scroll-area class="full-height">
             <q-list bordered class="rounded-borders">
               <div v-for="(rrr, index) in storedLastErrors" v-bind:key="rrr.path + '.' + rrr.startts">
-                <q-expansion-item>
+                <q-expansion-item v-model="expanded[index]">
                   <template v-slot:header>
                     <q-item-section avatar>
                       <q-avatar icon="sync_alt" color="accent" text-color="white" />
@@ -83,12 +83,13 @@ import 'prismjs/themes/prism.css';
 import 'prismjs/components/prism-json';
 
 export default {
-  name: 'ApiView',
+  name: 'LastErrorsView',
   components: {},
   mixins: [vgtMethods],
   data() {
     return {
       splitterModel: 100, // start at 50%
+      expanded: [],
       timer: null,
       isDark: false,
       columns: [
@@ -117,7 +118,8 @@ export default {
   computed: {
     ...mapState({
       statsUpdated: state => state.stats.updated,
-      storedLastErrors: state => state.lasterrors.errors
+      storedLastErrors: state => state.lasterrors.items,
+      expandedState: state => state.lasterrors.expanded
     })
   },
   watch: {
@@ -125,6 +127,11 @@ export default {
       handler: function() {
         console.log(`stats updated`);
         this.updateStats();
+      }
+    },
+    expanded: {
+      handler: function() {
+        console.log(`Expanded updated!`);
       }
     },
     storedLastErrors: {
@@ -147,9 +154,12 @@ export default {
     this.initialize();
     this.getStats({ fields: ['lasterrors'] });
     this.ready = true;
+    this.expanded = this.expandedState;
   },
   updated: function() {
-    //Prism.highlightAll();
+    this.$nextTick(() => {
+      Prism.highlightAll();
+    });
   },
   methods: {
     ...mapActions({
@@ -160,10 +170,12 @@ export default {
     initialize: function() {},
     handleShow(rowIndex) {
       console.log(`Index: ${rowIndex}`);
+      this.expanded.unshift(true);
       this.addErrorRRR({ rrr: this.rows[rowIndex] });
     },
     handleClear(index) {
       console.log(`Clear invoked: ${index}`);
+      this.expanded.splice(index, 1);
       this.removeErrorRRR({ index: index });
     },
     // TODO Reconsider
