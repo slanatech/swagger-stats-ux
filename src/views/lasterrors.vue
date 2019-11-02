@@ -190,7 +190,7 @@ export default {
       } else {
         this.expanded.unshift(true);
         this.addErrorRRR({ key: key, data: item });
-        //this.$refs.scrollArea.setScrollPosition(0);
+        this.$refs.scrollArea.setScrollPosition(0);
       }
     },
     handleClear(index) {
