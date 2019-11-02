@@ -37,18 +37,18 @@
       </template>
 
       <template v-slot:after>
-        <div class="q-pa-xs full-height">
-          <q-scroll-area ref="scrollArea" class="full-height">
-            <q-list bordered class="rounded-borders">
+        <div class="q-pa-xs full-height" style="min-height: 90vh;">
+          <q-scroll-area ref="scrollArea" class="full-height" style="min-height: 90vh;">
+            <q-list bordered class="rounded-borders" style="min-height: 90vh;">
               <div v-for="(item, index) in storedLastErrors" v-bind:key="item.key" :id="item.key">
-                <q-expansion-item v-model="expanded[index]">
+                <q-expansion-item v-model="expanded[index]" header-class="sws-bg-gradient1">
                   <template v-slot:header>
                     <q-item-section avatar>
                       <q-avatar icon="sync_alt" color="accent" text-color="white" />
                     </q-item-section>
 
                     <q-item-section>
-                      <div>{{ item.data.method + ' ' + item.data.path }}</div>
+                      <div>{{ getTitle(item.data) }}</div>
                       <div class="text-caption">{{ item.data['@timestamp'] }}</div>
                     </q-item-section>
 
@@ -170,6 +170,9 @@ export default {
     initialize: function() {},
     getKey(rrr) {
       return rrr.path + '.' + rrr.startts;
+    },
+    getTitle(rrr) {
+      return `${rrr.method} ${rrr.path} - ${rrr.http.response.code} (${rrr.responsetime} ms)`;
     },
     handleShow(rowIndex) {
       let item = this.rows[rowIndex];
