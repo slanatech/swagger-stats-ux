@@ -7,16 +7,12 @@
             :columns="columns"
             :rows="rows"
             styleClass="vgt-table condensed bordered striped sws-table"
-            :search-options="{
+            :row-style-class="getRowClass"
+            :search-options="{ enabled: true, skipDiacritics: true }"
+            :pagination-options="{ enabled: true, mode: 'records', perPage: 30, perPageDropdown: [10, 20, 30, 50, 80, 100], dropdownAllowAll: true }"
+            :sort-options="{
               enabled: true,
-              skipDiacritics: true
-            }"
-            :pagination-options="{
-              enabled: true,
-              mode: 'records',
-              perPage: 30,
-              perPageDropdown: [10, 20, 30, 50, 80, 100],
-              dropdownAllowAll: true
+              initialSortBy: { field: '@timestamp', type: 'desc' }
             }"
           >
             <template slot="table-row" slot-scope="props">
@@ -41,7 +37,7 @@
           <q-scroll-area ref="scrollArea" class="full-height" style="min-height: 90vh;">
             <q-list bordered class="rounded-borders" style="min-height: 90vh;">
               <div v-for="(item, index) in storedLastErrors" v-bind:key="item.key" :id="item.key">
-                <q-expansion-item v-model="expanded[index]" header-class="sws-bg-gradient1">
+                <q-expansion-item v-model="expanded[index]" header-class="sws-bg-gradient-a3a1a3">
                   <template v-slot:header>
                     <q-item-section avatar>
                       <q-avatar icon="sync_alt" color="accent" text-color="white" />
@@ -174,6 +170,15 @@ export default {
     getTitle(rrr) {
       return `${rrr.method} ${rrr.path} - ${rrr.http.response.code} (${rrr.responsetime} ms)`;
     },
+    getRowClass(row) {
+      let key = this.getKey(row);
+      let exists = findIndex(propEq('key', key))(this.storedLastErrors);
+      if (exists >= 0) {
+        return 'sws-bg-gradient-a3a1a3';
+      } else {
+        return '';
+      }
+    },
     handleShow(rowIndex) {
       let item = this.rows[rowIndex];
       let key = this.getKey(item);
@@ -210,6 +215,7 @@ export default {
       // Update numbers
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
       this.rows = pathOr([], ['lasterrors'], statsContainer);
+      //this.loadStats();
     }
   }
 };
