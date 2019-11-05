@@ -66,7 +66,7 @@
             <q-item-label>Last Errors</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/longest" exact>
+        <q-item to="/longestrequests" exact>
           <q-item-section avatar>
             <q-icon name="far fa-hourglass" />
           </q-item-section>

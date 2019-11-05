@@ -1,9 +1,18 @@
 /* Collection of Request Response Records captured for detailed view in UI
  */
+const state = () => {
+  return {
+    items: [],
+    expanded: []
+  };
+};
+
+/*
 const state = {
   items: [],
   expanded: []
 };
+*/
 
 const getters = {};
 

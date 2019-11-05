@@ -8,6 +8,7 @@ import Rates from './views/rates.vue';
 import Api from './views/api.vue';
 import Requests from './views/requests.vue';
 import LastErrors from './views/lasterrors.vue';
+import LongestRequests from './views/longestrequests.vue';
 import Horizon from './views/horizon.vue';
 
 Vue.use(Router);
@@ -47,6 +48,11 @@ export default new Router({
           path: '/lasterrors',
           name: 'lasterrors',
           component: LastErrors
+        },
+        {
+          path: '/longestrequests',
+          name: 'longestrequests',
+          component: LongestRequests
         }
       ]
     }
