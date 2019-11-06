@@ -236,7 +236,7 @@ export default {
       this.dbdata.setWData('w16', { data: dthData });
       this.dbdata.setWData('w17', { data: lagData });
 
-      this.loadStats();
+      // this.loadStats();
     },
 
     formatBytes: function(a, b) {

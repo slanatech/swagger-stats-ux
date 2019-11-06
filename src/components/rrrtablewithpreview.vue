@@ -24,9 +24,9 @@
                 <!--<span style="font-weight: bold; color: blue;">{{ props.row.path }}</span>-->
                 <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.api.path } }">{{ props.row.api.path }}</router-link>
               </span>
-              <span v-else-if="props.column.field == 'path'">
+              <!--<span v-else-if="props.column.field == 'path'">
                 <div style="font-weight: bold; color: blue;position: relative;">{{ props.row.path }}<div class="sws-css-bar" :style="`width: ${props.row.responsetime/122*100}%;`"></div></div>
-              </span>
+              </span>-->
               <span v-else>
                 {{ props.formattedRow[props.column.field] }}
               </span>
