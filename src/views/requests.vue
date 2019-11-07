@@ -138,10 +138,17 @@ export default {
   },
   computed: {
     ...mapState({
+      refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })
   },
   watch: {
+    refreshTrigger: {
+      handler: function() {
+        console.log(`Refreshing stats: ${Date.now()}`);
+        this.getStats({ fields: ['method'] });
+      }
+    },
     statsUpdated: {
       handler: function() {
         console.log(`stats updated`);
@@ -171,12 +178,6 @@ export default {
       this.dbdata.setWData('w26', { data: { labels: [], datasets: [{ data: [] }] } });
       this.dbdata.setWData('w27', { data: { labels: [], datasets: [{ data: [] }] } });
       this.dbdata.setWData('w28', { data: { labels: [], datasets: [{ data: [] }] } });
-    },
-    // TODO Reconsider
-    loadStats: function() {
-      this.timer = setTimeout(() => {
-        this.getStats({ fields: ['method'] });
-      }, 1000);
     },
     updateStats: function() {
       // Update table
@@ -211,8 +212,6 @@ export default {
       this.dbdata['w28'].data.labels = allMethods;
       this.dbdata['w28'].data.datasets[0].data = allMethods.map(x => statsContainer.method[x].avg_time);
       this.dbdata.touch('w28');
-
-      this.loadStats();
     }
   }
 };

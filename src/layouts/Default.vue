@@ -10,9 +10,9 @@
 
         <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
 
-        <q-btn dense flat size="md" round icon="refresh" />
+        <q-btn dense flat size="md" round icon="refresh" @click="performRefresh"/>
 
-        <q-btn-toggle v-model="refreshSpeed" text-color="blue-grey-4" toggle-text-color="white" size="md" dense flat :options="refreshOptions" />
+        <q-btn-toggle v-model="refreshTimeout" text-color="blue-grey-4" toggle-text-color="white" size="md" dense flat :options="refreshOptions" />
       </q-toolbar>
     </q-header>
 
@@ -20,7 +20,11 @@
       <q-list>
         <q-item v-for="item in menuItems" v-bind:key="item.link" :to="item.link" exact>
           <q-item-section avatar>
-            <q-icon :name="item.icon" />
+            <q-icon :name="item.icon">
+              <q-tooltip anchor="top right" self="center middle">
+                {{ item.title }}
+              </q-tooltip>
+            </q-icon>
           </q-item-section>
           <q-item-section>
             <q-item-label>{{ item.title }}</q-item-label>
@@ -42,6 +46,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
   name: 'SwsUxLayout',
 
@@ -62,11 +67,28 @@ export default {
         { title: 'API Method', link: '/apimethod', icon: 'radio_button_checked' },
         { title: 'Payload', link: '/payload', icon: 'swap_vert' }
       ],
-      refreshOptions: [{ icon: 'pause', value: 0 }, { label: '1s', value: 1000 }, { label: '30s', value: 30000 }, { label: '1m', value: 60000 }],
-      refreshSpeed: 60000
+      refreshOptions: [{ icon: 'pause', value: 0 }, { label: '1s', value: 1000 },{ label: '15s', value: 15000 }, { label: '30s', value: 30000 }, { label: '1m', value: 60000 }],
     };
   },
+  computed: {
+    refreshTimeout: {
+      get() {
+        return this.$store.state.refreshTimeout;
+      },
+      set(value) {
+        this.setRefreshTimeout({ timeout: value });
+      }
+    }
+  },
+  mounted() {
+    this.initRefresh();
+  },
   methods: {
+    ...mapActions({
+      initRefresh: 'initRefresh',
+      setRefreshTimeout: 'setRefreshTimeout', // map `this.getStats()` to `... dispatch('getStats')`
+      performRefresh: 'performRefresh',
+    }),
     toggleMiniState() {
       this.miniState = !this.miniState;
       // need to wait a bit till it fully expands/collapses
@@ -76,8 +98,8 @@ export default {
         }, 200);
       });
     },
-    handleLeftLayout(state){
-      console.log(`Left Layout ! ${state}`)
+    handleLeftLayout(state) {
+      console.log(`Left Layout ! ${state}`);
       this.$nextTick(() => {
         setTimeout(() => {
           window.dispatchEvent(new Event('resize'));

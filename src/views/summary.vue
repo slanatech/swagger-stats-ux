@@ -121,10 +121,17 @@ export default {
   },
   computed: {
     ...mapState({
+      refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })
   },
   watch: {
+    refreshTrigger: {
+      handler: function() {
+        console.log(`Refreshing stats: ${Date.now()}`);
+        this.getStats({ fields: ['timeline', 'apidefs'] });
+      }
+    },
     statsUpdated: {
       handler: function() {
         console.log(`stats updated`);
@@ -161,13 +168,6 @@ export default {
       this.dbdata.setWData('w17', { data: [] });
     },
 
-    // TODO Reconsider
-    loadStats: function() {
-      this.timer = setTimeout(() => {
-        this.getStats({ fields: ['timeline', 'apidefs'] });
-      }, 1000);
-    },
-
     updateStats: function() {
       // Update numbers
       let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
@@ -189,11 +189,7 @@ export default {
           pathOr(0, ['stats', 'server_error'], entry)
         ]);
         cpuData.push([new Date(entry.ts), pathOr(0, ['sys', 'cpu'], entry)]);
-        memData.push([
-          new Date(entry.ts),
-          pathOr(0, ['sys', 'heapTotal'], entry) / 1048576,
-          pathOr(0, ['sys', 'heapUsed'], entry) / 1048576
-        ]);
+        memData.push([new Date(entry.ts), pathOr(0, ['sys', 'heapTotal'], entry) / 1048576, pathOr(0, ['sys', 'heapUsed'], entry) / 1048576]);
         lagData.push([new Date(entry.ts), pathOr(0, ['sys', 'lag'], entry)]);
         // Trends
         trendsData[0].push(pathOr(0, ['stats', 'requests'], entry));
@@ -235,8 +231,6 @@ export default {
       this.dbdata.setWData('w15', { data: memData });
       this.dbdata.setWData('w16', { data: dthData });
       this.dbdata.setWData('w17', { data: lagData });
-
-      // this.loadStats();
     },
 
     formatBytes: function(a, b) {
