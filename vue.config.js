@@ -1,4 +1,5 @@
 const path = require('path');
+const http = require('http');
 const webpack = require('webpack');
 
 module.exports = {
@@ -6,7 +7,10 @@ module.exports = {
   devServer: {
     proxy: {
       '/swagger-stats': {
-        target: 'http://localhost:3040'
+        target: 'http://localhost:3040',
+        // This enables keepalive via proxy
+        // See https://github.com/http-party/node-http-proxy/issues/767
+        agent: http.globalAgent
       }
     }
   },

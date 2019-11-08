@@ -182,10 +182,16 @@ export default {
   },
   computed: {
     ...mapState({
-      statsUpdated: state => state.stats.updated
+      statsUpdated: state => state.stats.updated,
+      refreshTrigger: state => state.refreshTrigger
     })
   },
   watch: {
+    refreshTrigger: {
+      handler: function() {
+        this.getStats({ fields: ['timeline', 'apidefs'] });
+      }
+    },
     statsUpdated: {
       handler: function() {
         console.log(`stats updated`);
@@ -219,13 +225,6 @@ export default {
       this.dbdata.setWData('w14', { data: [] });
       this.dbdata.setWData('w15', { data: [] });
       this.dbdata.setWData('w16', { data: [] });
-    },
-
-    // TODO Reconsider
-    loadStats: function() {
-      this.timer = setTimeout(() => {
-        this.getStats({ fields: ['timeline', 'apidefs'] });
-      }, 1000);
     },
 
     updateStats: function() {
@@ -278,8 +277,6 @@ export default {
       this.dbdata.setWData('w14', { data: asData });
       this.dbdata.setWData('w15', { data: reqErrTrendData });
       this.dbdata.setWData('w16', { data: htData });
-
-      this.loadStats();
     }
   }
 };

@@ -9,19 +9,22 @@
             styleClass="vgt-table condensed bordered striped sws-table"
             :row-style-class="getRowClass"
             :search-options="{ enabled: true, skipDiacritics: true }"
-            :pagination-options="{ enabled: true, mode: 'records', perPage: 30, perPageDropdown: [10, 20, 30, 50, 80, 100], dropdownAllowAll: true }"
+            :pagination-options="{ enabled: true, mode: 'records', perPage: 25, perPageDropdown: [10, 25, 50, 80, 100], dropdownAllowAll: true }"
             :sort-options="{
               enabled: true,
-              initialSortBy: { field: sortField, type: 'desc' }
+              initialSortBy: { field: sortField, type: sortOrder }
             }"
+            @on-sort-change="onSortChange"
           >
             <template slot="table-row" slot-scope="props">
               <span v-if="props.column.field == 'expand'">
                 <!--<q-icon name="visibility" />-->
                 <q-btn flat round color="secondary" icon="play_arrow" size="xs" @click="handleShow(props.row.originalIndex)" />
               </span>
+              <span v-else-if="props.column.field == 'method'">
+                <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.api.path } }">{{ props.row.method }}</router-link>
+              </span>
               <span v-else-if="props.column.field == 'api.path'">
-                <!--<span style="font-weight: bold; color: blue;">{{ props.row.path }}</span>-->
                 <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.api.path } }">{{ props.row.api.path }}</router-link>
               </span>
               <!--<span v-else-if="props.column.field == 'path'">
@@ -90,6 +93,7 @@ export default {
       splitterModel: 100, // start at 50%
       statsField: 'lasterrors',
       sortField: '@timestamp',
+      sortOrder: 'desc',
       expanded: [],
       timer: null,
       isDark: false,
@@ -211,17 +215,16 @@ export default {
       this.expanded.splice(index, 1);
       this.removeStoredItem({ index: index });
     },
-    // TODO Reconsider
-    loadStats: function() {
-      this.timer = setTimeout(() => {
-        this.getStats({ fields: [this.statsField] });
-      }, 1000);
-    },
     updateStats: function() {
       // Update numbers
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
       this.rows = pathOr([], [this.statsField], statsContainer);
       //this.loadStats();
+    },
+    onSortChange(params) {
+      // params is array [{field:'name',type:'asc|desc'},...]
+      this.sortField = pathOr('@timestamp', [0, 'field'], params);
+      this.sortOrder = pathOr('@timestamp', [0, 'type'], params);
     }
   }
 };

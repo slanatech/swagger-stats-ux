@@ -19,8 +19,13 @@
         }"
       >
         <template slot="table-row" slot-scope="props">
-          <span v-if="props.column.field == 'path'">
-            <!--<span style="font-weight: bold; color: blue;">{{ props.row.path }}</span>-->
+          <span v-if="props.column.field == 'expand'">
+            <q-btn flat round color="secondary" icon="play_arrow" size="xs" @click="handleShow(props.row.originalIndex)" />
+          </span>
+          <span v-else-if="props.column.field == 'method'">
+            <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.path } }">{{ props.row.method }}</router-link>
+          </span>
+          <span v-else-if="props.column.field == 'path'">
             <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.path } }">{{ props.row.path }}</router-link>
           </span>
           <span v-else>
@@ -53,6 +58,7 @@ export default {
       timer: null,
       isDark: false,
       columns: [
+        { label: '', field: 'expand', width: '1%', tdClass: 'text-center pointer' },
         { label: 'Method', field: 'method', tdClass: 'text-weight-bold' },
         { label: 'Path', field: 'path', tdClass: 'text-weight-bold' },
         { label: 'Requests', field: 'requests', type: 'number', tdClass: 'text-weight-bold' },
@@ -100,10 +106,16 @@ export default {
   },
   computed: {
     ...mapState({
-      statsUpdated: state => state.stats.updated
+      statsUpdated: state => state.stats.updated,
+      refreshTrigger: state => state.refreshTrigger
     })
   },
   watch: {
+    refreshTrigger: {
+      handler: function() {
+        this.getStats({ fields: ['apidefs', 'apistats'] });
+      }
+    },
     statsUpdated: {
       handler: function() {
         console.log(`stats updated`);

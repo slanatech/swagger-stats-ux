@@ -10,7 +10,7 @@
 
         <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
 
-        <q-btn dense flat size="md" round icon="refresh" @click="performRefresh"/>
+        <q-btn dense flat size="md" round icon="refresh" @click="performRefresh" />
 
         <q-btn-toggle v-model="refreshTimeout" text-color="blue-grey-4" toggle-text-color="white" size="md" dense flat :options="refreshOptions" />
       </q-toolbar>
@@ -35,8 +35,8 @@
       </q-list>
     </q-drawer>
 
-    <q-drawer overlay v-model="rightShown" side="right" bordered>
-      <!-- drawer content -->
+    <q-drawer v-model="rightShown" side="right" bordered>
+      OPA
     </q-drawer>
 
     <q-page-container>
@@ -67,7 +67,14 @@ export default {
         { title: 'API Method', link: '/apimethod', icon: 'radio_button_checked' },
         { title: 'Payload', link: '/payload', icon: 'swap_vert' }
       ],
-      refreshOptions: [{ icon: 'pause', value: 0 }, { label: '1s', value: 1000 },{ label: '15s', value: 15000 }, { label: '30s', value: 30000 }, { label: '1m', value: 60000 }],
+      refreshOptions: [
+        { icon: 'pause', value: 0 },
+        { label: '1s', value: 1000 },
+        { label: '5s', value: 5000 },
+        { label: '15s', value: 15000 },
+        { label: '30s', value: 30000 },
+        { label: '1m', value: 60000 }
+      ]
     };
   },
   computed: {
@@ -87,7 +94,7 @@ export default {
     ...mapActions({
       initRefresh: 'initRefresh',
       setRefreshTimeout: 'setRefreshTimeout', // map `this.getStats()` to `... dispatch('getStats')`
-      performRefresh: 'performRefresh',
+      performRefresh: 'performRefresh'
     }),
     toggleMiniState() {
       this.miniState = !this.miniState;

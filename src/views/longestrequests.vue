@@ -8,14 +8,23 @@ export default {
     return {
       statsField: 'longestreq',
       sortField: 'responsetime',
+      sortOrder: 'desc',
     };
   },
   computed: {
     ...mapState({
       statsUpdated: state => state.stats.updated,
+      refreshTrigger: state => state.refreshTrigger,
       storedItems: state => state.longestrequests.items,
       expandedState: state => state.longestrequests.expanded
     })
+  },
+  watch: {
+    refreshTrigger: {
+      handler: function() {
+        this.getStats({ fields: [this.statsField] });
+      }
+    }
   },
   methods: {
     ...mapActions({
