@@ -167,10 +167,10 @@ export default {
     }),
     initialize: function() {
       // Init dashboard data
-      this.dbdata.setWData('w1', { value: 0, total:0 });
-      this.dbdata.setWData('w2', { value: 0, total:0 });
-      this.dbdata.setWData('w3', { value: 0, total:0 });
-      this.dbdata.setWData('w4', { value: 0, total:0 });
+      this.dbdata.setWData('w1', { value: 0, total: 0 });
+      this.dbdata.setWData('w2', { value: 0, total: 0 });
+      this.dbdata.setWData('w3', { value: 0, total: 0 });
+      this.dbdata.setWData('w4', { value: 0, total: 0 });
 
       this.dbdata.setWData('w23', { data: { labels: [], datasets: [{ data: [] }] } });
       this.dbdata.setWData('w24', { data: { labels: [], datasets: [{ data: [] }] } });
@@ -182,11 +182,11 @@ export default {
     updateStats: function() {
       // Update table
       this.rows = statsContainer.getMethodStatsArray();
-      let totalRequests = pathOr(0,['all','requests'],statsContainer);
-      this.dbdata.setWData('w1', { value: pathOr(0,['method','GET','requests'],statsContainer), total:totalRequests });
-      this.dbdata.setWData('w2', { value: pathOr(0,['method','POST','requests'],statsContainer), total:totalRequests });
-      this.dbdata.setWData('w3', { value: pathOr(0,['method','PUT','requests'],statsContainer), total:totalRequests });
-      this.dbdata.setWData('w4', { value: pathOr(0,['method','DELETE','requests'],statsContainer), total:totalRequests });
+      let totalRequests = pathOr(0, ['all', 'requests'], statsContainer);
+      this.dbdata.setWData('w1', { value: pathOr(0, ['method', 'GET', 'requests'], statsContainer), total: totalRequests });
+      this.dbdata.setWData('w2', { value: pathOr(0, ['method', 'POST', 'requests'], statsContainer), total: totalRequests });
+      this.dbdata.setWData('w3', { value: pathOr(0, ['method', 'PUT', 'requests'], statsContainer), total: totalRequests });
+      this.dbdata.setWData('w4', { value: pathOr(0, ['method', 'DELETE', 'requests'], statsContainer), total: totalRequests });
 
       let allMethods = Object.keys(pathOr({}, ['method'], statsContainer));
       this.dbdata['w23'].data.labels = allMethods;

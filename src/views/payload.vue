@@ -134,8 +134,6 @@ export default {
 
     updateStats: function() {
       // Update numbers
-      let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
-
       let trendsData = [[], [], [], [], [], []];
       let reqData = [];
       let resData = [];
@@ -172,9 +170,9 @@ export default {
 
       // ??? total: rsTotal
       let { value, qualifier } = utils.formatBytes(received, 2);
-      this.dbdata.setWData('w1', { value: value, qualifier: qualifier, trend: trendsData[0], trendMax: rsMax});
+      this.dbdata.setWData('w1', { value: value, qualifier: qualifier, trend: trendsData[0], trendMax: rsMax });
       ({ value, qualifier } = utils.formatBytes(sent, 2));
-      this.dbdata.setWData('w4', { value: value, qualifier: qualifier, trend: trendsData[3], trendMax: rsMax});
+      this.dbdata.setWData('w4', { value: value, qualifier: qualifier, trend: trendsData[3], trendMax: rsMax });
 
       this.dbdata.setWData('w2', { value: avgReceived, trend: trendsData[1], trendMax: arsMax });
       this.dbdata.setWData('w3', { value: avgSent, trend: trendsData[2], trendMax: arsMax });

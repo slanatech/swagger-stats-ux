@@ -8,7 +8,7 @@ export default {
     return {
       statsField: 'longestreq',
       sortField: 'responsetime',
-      sortOrder: 'desc',
+      sortOrder: 'desc'
     };
   },
   computed: {
@@ -32,7 +32,7 @@ export default {
       addStoredItem: 'longestrequests/add',
       removeStoredItem: 'longestrequests/remove',
       setExpanded: 'longestrequests/setExpanded'
-    }),
+    })
   }
 };
 </script>

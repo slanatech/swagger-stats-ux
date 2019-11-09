@@ -32,7 +32,7 @@ export default {
             id: 'w1',
             type: 'DbHorizon',
             cspan: 16,
-            properties:{
+            properties: {
               scheme: 'schemeYlOrBr'
             }
           }
@@ -76,7 +76,7 @@ export default {
     }),
     initialize: function() {
       // Init dashboard data
-      this.dbdata.setWData('w1', { data: [{key:'empty',values:[new Date(),0]}] });
+      this.dbdata.setWData('w1', { data: [{ key: 'empty', values: [new Date(), 0] }] });
     },
 
     // TODO Reconsider
@@ -87,7 +87,6 @@ export default {
     },
 
     updateStats: function() {
-
       let timelineSorted = statsContainer.getSortedTimeline();
       let chartData = [];
       for (let series of this.seriesDefs) {
@@ -99,7 +98,6 @@ export default {
         chartData.push({ key: series.title, values: seriesValues });
       }
       this.dbdata.setWData('w1', { data: chartData });
-
 
       this.loadStats();
     }

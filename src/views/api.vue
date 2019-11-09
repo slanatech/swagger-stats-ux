@@ -37,20 +37,13 @@
 </template>
 
 <script>
-// Development
-import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
-// Prod
-// import { DbData, DbDashboard } from 'dashblocks';
-import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import { vgtMethods } from '../mixins/vgtmethods';
 
 export default {
   name: 'ApiView',
-  components: {
-    DbDashboard
-  },
+  components: {},
   mixins: [vgtMethods],
   data() {
     return {
@@ -76,7 +69,7 @@ export default {
         { label: 'Avg Res Size', field: 'avg_res_clength', type: 'number', formatFn: this.formatToFixed0 },
         { label: 'Tags', field: 'tags', type: 'string' }
       ],
-      rows: [],
+      rows: []
     };
   },
   computed: {
@@ -107,8 +100,7 @@ export default {
     ...mapActions({
       getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
     }),
-    initialize: function() {
-    },
+    initialize: function() {},
     // TODO Reconsider
     loadStats: function() {
       this.timer = setTimeout(() => {

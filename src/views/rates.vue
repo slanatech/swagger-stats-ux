@@ -103,78 +103,6 @@ export default {
             }
           },
 
-          /*
-          { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Requests', subtitle: 'Total requests received', icon: 'fa fa-signal' } },
-          { id: 'w2', type: 'DbNumber', cspan: 2, properties: {
-            title: 'Apdex Score', subtitle: 'Overall Apdex Score', total: 1, trendMax: 1, format: '%.2f',
-            percentRanges: [
-              { value: 50, color: 'red'},
-              { value: 60, color: 'orange'},
-              { value: 100, color: 'green'},
-            ]}
-          },
-          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Current Req Rate', subtitle: 'Requests per second', footer: 'On last time interval',format: '%.2f', icon: 'fa fa-exchange-alt' } },
-          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Current Err Rate', subtitle: 'Errors per second', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'CPU', subtitle: 'CPU Usage', total: 100, trendMax: 100, format: '%.2f %s', qualifier: '%' } },
-          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Memory', subtitle: 'heapUsed', format: '%.2f %s', icon: 'fa fa-sd-card' } },
-
-          { id: 'w7', type: 'DbNumber', cspan: 2, properties: { title: 'Errors', subtitle: 'Total Error Responses' } },
-          { id: 'w8', type: 'DbNumber', cspan: 2, properties: {
-            title: '2XX', subtitle: 'Success Responses',
-            percentRanges: [
-              { value: 50, color: 'red'},
-              { value: 70, color: 'orange'},
-              { value: 100, color: 'green'}
-            ]}
-          },
-          { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: '3XX', subtitle: 'Redirect Responses' } },
-          { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: '4XX', subtitle: 'Client Error Responses' } },
-          { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: '5XX', subtitle: 'Server Error Responses' } },
-          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Current Avg HT', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
-          {
-            id: 'w14',
-            type: 'DbDygraphsLine',
-            cspan: 12,
-            height: 140,
-            properties: {
-              options: {
-                stackedGraph: false,
-                title: 'CPU',
-                ylabel: 'CPU, %',
-                labels: ['Date','CPU']
-              }
-            }
-          },
-          {
-            id: 'w15',
-            type: 'DbDygraphsLine',
-            cspan: 12,
-            height: 140,
-            properties: {
-              options: {
-                stackedGraph: false,
-                title: 'Memory',
-                ylabel: 'MB',
-                labels: ['Date','heapTotal', 'heapUsed']
-              }
-            }
-          },
-          {
-            id: 'w16',
-            type: 'DbDygraphsBar',
-            cspan: 12,
-            height: 250,
-            properties: {
-              options: {
-                stackedGraph: true,
-                title: 'Traffic',
-                ylabel: 'Requests',
-                labels: ['Date', 'Success', 'Redirect', 'Client Error','Server Error'],
-                legend: 'always'
-              }
-            }
-          }
-        */
         ]
       },
       ready: false
@@ -229,7 +157,6 @@ export default {
 
     updateStats: function() {
       // Update numbers
-      let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
 
       let trendsData = [[], [], [], [], []];
       let asData = [];
@@ -239,9 +166,9 @@ export default {
       let timelineSorted = statsContainer.getSortedTimeline();
       //let trendReqData =  [];
       for (let entry of timelineSorted) {
-        asData.push([new Date(entry.ts),pathOr(0, ['stats', 'apdex_score'], entry)]);
-        reqErrTrendData.push([new Date(entry.ts),pathOr(0, ['stats', 'req_rate'], entry),pathOr(0, ['stats', 'err_rate'], entry)]);
-        htData.push([new Date(entry.ts),pathOr(0, ['stats', 'max_time'], entry),pathOr(0, ['stats', 'avg_time'], entry)]);
+        asData.push([new Date(entry.ts), pathOr(0, ['stats', 'apdex_score'], entry)]);
+        reqErrTrendData.push([new Date(entry.ts), pathOr(0, ['stats', 'req_rate'], entry), pathOr(0, ['stats', 'err_rate'], entry)]);
+        htData.push([new Date(entry.ts), pathOr(0, ['stats', 'max_time'], entry), pathOr(0, ['stats', 'avg_time'], entry)]);
         trendsData[0].push(pathOr(0, ['stats', 'apdex_score'], entry));
         trendsData[1].push(pathOr(0, ['stats', 'req_rate'], entry));
         trendsData[2].push(pathOr(0, ['stats', 'err_rate'], entry));
@@ -256,7 +183,6 @@ export default {
       let maxHT = pathOr(0, ['stats', 'max_time'], lastTimeBucket);
       let avgHT = pathOr(0, ['stats', 'avg_time'], lastTimeBucket);
 
-      let reqTrendMax = Math.max(...trendsData[0]);
       let reqRateTrendMax = Math.max(...trendsData[1]);
       let mahHTTrendMax = Math.max(...trendsData[3]);
       this.dbdata.setWData('w1', { value: apdexScore, trend: trendsData[0] });
