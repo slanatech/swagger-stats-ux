@@ -9,6 +9,7 @@ import Api from './views/api.vue';
 import Requests from './views/requests.vue';
 import LastErrors from './views/lasterrors.vue';
 import LongestRequests from './views/longestrequests.vue';
+import Payload from './views/payload.vue';
 import Horizon from './views/horizon.vue';
 
 Vue.use(Router);
@@ -53,6 +54,11 @@ export default new Router({
           path: '/longestrequests',
           name: 'longestrequests',
           component: LongestRequests
+        },
+        {
+          path: '/payload',
+          name: 'payload',
+          component: Payload
         }
       ]
     }

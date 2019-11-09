@@ -12,6 +12,7 @@ import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
+import utils from '@/utils.js';
 
 export default {
   name: 'SummaryView',
@@ -217,7 +218,7 @@ export default {
       this.dbdata.setWData('w3', { value: requestRate, trend: trendsData[2] });
       this.dbdata.setWData('w4', { value: errRate, trend: trendsData[3], trendMax: reqRateTrendMax });
       this.dbdata.setWData('w5', { value: pathOr(0, ['sys', 'cpu'], statsContainer), trend: trendsData[4] });
-      let { value, qualifier } = this.formatBytes(pathOr(0, ['sys', 'heapUsed'], statsContainer), 2);
+      let { value, qualifier } = utils.formatBytes(pathOr(0, ['sys', 'heapUsed'], statsContainer), 2);
       this.dbdata.setWData('w6', { value: value, qualifier: qualifier, trend: trendsData[5] });
 
       this.dbdata.setWData('w7', { value: pathOr(0, ['all', 'errors'], statsContainer), trend: trendsData[6], trendMax: reqTrendMax, total: requestsTotal });
@@ -231,15 +232,6 @@ export default {
       this.dbdata.setWData('w15', { data: memData });
       this.dbdata.setWData('w16', { data: dthData });
       this.dbdata.setWData('w17', { data: lagData });
-    },
-
-    formatBytes: function(a, b) {
-      if (0 === a) return { value: 0, qualifier: 'Bytes' };
-      let c = 1e3,
-        d = b || 2,
-        e = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        f = Math.floor(Math.log(a) / Math.log(c));
-      return { value: parseFloat((a / Math.pow(c, f)).toFixed(d)), qualifier: e[f] };
     },
 
     collapse: function(array, chunkSize) {

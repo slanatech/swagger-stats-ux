@@ -1,6 +1,5 @@
 <template>
   <q-page padding>
-    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
     <div style="padding: 4px;">
       <vue-good-table
         :columns="columns"
@@ -78,30 +77,6 @@ export default {
         { label: 'Tags', field: 'tags', type: 'string' }
       ],
       rows: [],
-      dbdata: new DbData(),
-      dbspec: {
-        layout: {
-          type: 'grid',
-          size: 12
-        },
-        // prettier-ignore
-        widgets: [
-          { id: 'w1', type: 'DbNumber', cspan: 2, properties: {
-              title: 'Current Apdex Score', subtitle: 'Apdex Score', total: 1, trendMax: 1, format: '%.2f',
-              percentRanges: [
-                { value: 50, color: 'red'},
-                { value: 60, color: 'orange'},
-                { value: 100, color: 'green'},
-              ]}
-          },
-          { id: 'w2', type: 'DbNumber', cspan: 2, properties: { title: 'Current Req Rate', subtitle: 'Requests per second', format: '%.2f', icon: 'fa fa-exchange-alt' } },
-          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Current Err Rate', subtitle: 'Errors per second', format: '%.2f' } },
-          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Current Max HT', subtitle: 'Max Handle Time', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'Current Avg HT', subtitle: 'Avg Handle Time', format: '%.2f', icon: 'fa fa-exclamation' } },
-          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'OPA', subtitle: 'Average Handle Time', format: '%d ms',icon: 'fa fa-hourglass-half' } },
-        ]
-      },
-      ready: false
     };
   },
   computed: {
@@ -133,13 +108,6 @@ export default {
       getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
     }),
     initialize: function() {
-      // Init dashboard data
-      this.dbdata.setWData('w1', { value: 0 });
-      this.dbdata.setWData('w2', { value: 0 });
-      this.dbdata.setWData('w3', { value: 0 });
-      this.dbdata.setWData('w4', { value: 0 });
-      this.dbdata.setWData('w5', { value: 0 });
-      this.dbdata.setWData('w6', { value: 0 });
     },
     // TODO Reconsider
     loadStats: function() {
