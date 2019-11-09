@@ -15,7 +15,9 @@ module.exports = {
     }
   },
   pluginOptions: {
-    quasar: {}
+    quasar: {
+      treeShake: true
+    }
   },
   transpileDependencies: [/[\\\/]node_modules[\\\/]quasar[\\\/]/],
   configureWebpack: {
