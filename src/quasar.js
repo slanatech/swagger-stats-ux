@@ -27,7 +27,8 @@ import {
   QAvatar,
   QBtnToggle,
   QSeparator,
-  QTooltip
+  QTooltip,
+  QTable
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -52,7 +53,8 @@ Vue.use(Quasar, {
     QAvatar,
     QBtnToggle,
     QSeparator,
-    QTooltip
+    QTooltip,
+    QTable
   },
   directives: {},
   plugins: {}

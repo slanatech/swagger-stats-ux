@@ -11,6 +11,19 @@ class Utils {
       f = Math.floor(Math.log(a) / Math.log(c));
     return { value: parseFloat((a / Math.pow(c, f)).toFixed(d)), qualifier: e[f] };
   }
+
+  bucketsToLabels(buckets) {
+    let labels = [];
+    if (Array.isArray(buckets) && buckets.length > 0) {
+      let prevBucket = 0;
+      for (let bucket of buckets) {
+        labels.push(`${prevBucket}-${bucket}`);
+        prevBucket = bucket;
+      }
+      labels.push(`${prevBucket}-inf`);
+    }
+    return labels;
+  }
 }
 
 const utils = new Utils();

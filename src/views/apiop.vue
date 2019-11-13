@@ -59,8 +59,85 @@ export default {
           { id: 'w9', type: 'DbNumber', cspan: 2, properties: { title: '3XX', subtitle: 'Redirect Responses' } },
           { id: 'w10', type: 'DbNumber', cspan: 2, properties: { title: '4XX', subtitle: 'Client Error Responses' } },
           { id: 'w11', type: 'DbNumber', cspan: 2, properties: { title: '5XX', subtitle: 'Server Error Responses' } },
-          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Avg Res Payload', subtitle: 'Avg Res Content Len', format: '%.2f %s', icon: 'fa fa-sd-card' } }
+          { id: 'w12', type: 'DbNumber', cspan: 2, properties: { title: 'Avg Res Payload', subtitle: 'Avg Res Content Len', format: '%.2f %s', icon: 'fa fa-sd-card' } },
           // TODO
+          {
+            id: 'w25',
+            type: 'DbChartjsBar',
+            cspan: 4,
+            height: 300,
+            properties: {
+              options: {
+                title: { display: true, text: 'Handle Time Histogram', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}},
+                scales: { xAxes: [{ ticks: {autoSkip: false,maxRotation: 50,minRotation: 50}}]}
+              }
+            }
+          },
+          {
+            id: 'w26',
+            type: 'DbChartjsBar',
+            cspan: 4,
+            height: 300,
+            properties: {
+              options: {
+                title: { display: true, text: 'Request Size Histogram', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}},
+                scales: { xAxes: [{ ticks: {autoSkip: false,maxRotation: 50,minRotation: 50}}]}
+              }
+            }
+          },
+          {
+            id: 'w27',
+            type: 'DbChartjsBar',
+            cspan: 4,
+            height: 300,
+            properties: {
+              options: {
+                title: { display: true, text: 'Response Size Histogram', position: 'top'},
+                legend: { display: false },
+                plugins: { labels: {render: ()=>{}}},
+                scales: { xAxes: [{ ticks: {autoSkip: false,maxRotation: 50,minRotation: 50}}]}
+              }
+            }
+          },
+
+          {
+            id: 'w28',
+            type: 'DbChartjsDoughnut',
+            cspan: 4,
+            height: 250,
+            properties: {
+              options: {
+                title: {display: true, text: 'Response Codes', position: 'top'},
+                legend: { position: 'right' }
+              }
+            }
+          },
+
+          {
+            id: 'w29',
+            type: 'QTable',
+            cspan: 8,
+            height: 250,
+            properties: {
+              title: "Parameters",
+              "hide-bottom": true,
+              dense: true,
+              flat: true,
+              columns: [
+                { name: 'name', label: 'Name', classes: 'text-bold', required: true, align: 'left',field: row => row.name,format: val => `${val}`,sortable: true },
+                { name: 'in', label: 'In', required: false, align: 'left',field: row => row.in,format: val => `${val}`,sortable: true },
+                { name: 'description', label: 'Description', required: false, align: 'left',field: row => row.description,format: val => `${val}`,sortable: true },
+                { name: 'hits', label: 'Hits', required: false, align: 'left',field: row => row.hits, format: val => `${val}`,sortable: true },
+                { name: 'misses', label: 'Misses', required: false, align: 'left',field: row => row.misses, format: val => `${val}`,sortable: true },
+                { name: 'required', label: 'Required', required: false, align: 'left',field: row => row.required, format: val => `${val}`,sortable: true }
+              ]
+            }
+          },
+
         ]
       },
       ready: false
@@ -111,6 +188,13 @@ export default {
       this.dbdata.setWData('w10', { value: 0 });
       this.dbdata.setWData('w11', { value: 0 });
       this.dbdata.setWData('w12', { value: 0 });
+
+      this.dbdata.setWData('w25', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w26', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w27', { data: { labels: [], datasets: [{ data: [] }] } });
+      this.dbdata.setWData('w28', { data: { labels: [], datasets: [{ data: [] }] } });
+
+      this.dbdata.setWData('w29', { data: [] });
     },
 
     updateStats: function() {
@@ -139,6 +223,27 @@ export default {
       this.dbdata.setWData('w11', { value: pathOr(0, ['server_error'], apiOpStats), total: requestsTotal });
       ({ value, qualifier } = utils.formatBytes(pathOr(0, ['avg_res_clength'], apiOpStats), 2));
       this.dbdata.setWData('w12', { value: value, qualifier: qualifier });
+
+      this.dbdata['w25'].data.labels = utils.bucketsToLabels(pathOr([], ['duration', 'buckets'], apiOpDetails));
+      this.dbdata['w25'].data.datasets[0].data = pathOr([], ['duration', 'values'], apiOpDetails);
+      this.dbdata.touch('w25');
+
+      this.dbdata['w26'].data.labels = utils.bucketsToLabels(pathOr([], ['req_size', 'buckets'], apiOpDetails));
+      this.dbdata['w26'].data.datasets[0].data = pathOr([], ['req_size', 'values'], apiOpDetails);
+      this.dbdata.touch('w26');
+
+      this.dbdata['w27'].data.labels = utils.bucketsToLabels(pathOr([], ['res_size', 'buckets'], apiOpDetails));
+      this.dbdata['w27'].data.datasets[0].data = pathOr([], ['res_size', 'values'], apiOpDetails);
+      this.dbdata.touch('w27');
+
+      let codes = Object.keys(pathOr({}, ['code'], apiOpDetails));
+      this.dbdata['w28'].data.labels = codes;
+      this.dbdata['w28'].data.datasets[0].data = codes.map(x => pathOr(0, ['code', x, 'count'], apiOpDetails));
+      this.dbdata.touch('w28');
+
+      let paramNames = Object.keys(pathOr({}, ['parameters'], apiOpDetails));
+      this.dbdata['w29'].data = paramNames.map(x => pathOr(0, ['parameters', x], apiOpDetails));
+      this.dbdata.touch('w29');
     }
   }
 };
