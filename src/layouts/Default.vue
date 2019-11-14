@@ -64,7 +64,8 @@ export default {
         { title: 'Longest Requests', link: '/longestrequests', icon: 'hourglass_empty' },
         { title: 'Rates & Durations', link: '/rates', icon: 'schedule' },
         { title: 'API', link: '/api', icon: 'code' },
-        { title: 'API Method', link: '/apimethod', icon: 'radio_button_checked' },
+        { title: 'API Responses', link: '/apiopcodes', icon: 'pie_chart' },
+        { title: 'API Operation', link: '/apiop', icon: 'radio_button_checked' },
         { title: 'Payload', link: '/payload', icon: 'swap_vert' }
       ],
       refreshOptions: [

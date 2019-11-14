@@ -5,6 +5,7 @@ import Summary from './views/summary.vue';
 import Rates from './views/rates.vue';
 import Api from './views/api.vue';
 import ApiOp from './views/apiop.vue';
+import ApiOpCodes from './views/apiopcodes.vue';
 import Requests from './views/requests.vue';
 import LastErrors from './views/lasterrors.vue';
 import LongestRequests from './views/longestrequests.vue';
@@ -48,6 +49,11 @@ export default new Router({
           path: '/apiop',
           name: 'apiop',
           component: ApiOp
+        },
+        {
+          path: '/apiopcodes',
+          name: 'apiopcodes',
+          component: ApiOpCodes
         },
         {
           path: '/lasterrors',

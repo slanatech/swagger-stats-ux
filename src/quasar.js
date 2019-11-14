@@ -28,7 +28,9 @@ import {
   QBtnToggle,
   QSeparator,
   QTooltip,
-  QTable
+  QTable,
+  QCard,
+  QCardSection
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -54,7 +56,9 @@ Vue.use(Quasar, {
     QBtnToggle,
     QSeparator,
     QTooltip,
-    QTable
+    QTable,
+    QCard,
+    QCardSection
   },
   directives: {},
   plugins: {}
