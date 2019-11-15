@@ -7,6 +7,7 @@ import Api from './views/api.vue';
 import ApiOp from './views/apiop.vue';
 import ApiOpCodes from './views/apiopcodes.vue';
 import Requests from './views/requests.vue';
+import Errors from './views/errors.vue';
 import LastErrors from './views/lasterrors.vue';
 import LongestRequests from './views/longestrequests.vue';
 import Payload from './views/payload.vue';
@@ -69,6 +70,11 @@ export default new Router({
           path: '/payload',
           name: 'payload',
           component: Payload
+        },
+        {
+          path: '/errors',
+          name: 'errors',
+          component: Errors
         }
       ]
     }

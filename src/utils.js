@@ -24,6 +24,17 @@ class Utils {
     }
     return labels;
   }
+
+  getKVObjSortedArray(obj, asc) {
+    let keys = Object.keys(obj);
+    let data = keys.map(x => {
+      return { k: x, v: obj[x] };
+    });
+    data.sort(function(a, b) {
+      return asc ? a.v - b.v : b.v - a.v;
+    });
+    return data;
+  }
 }
 
 const utils = new Utils();
