@@ -10,6 +10,10 @@
 
         <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
 
+        <q-toggle color="orange" v-model="rotateEnabled" icon="dynamic_feed">
+          <q-tooltip anchor="bottom right" self="center middle">Auto-Rotate</q-tooltip>
+        </q-toggle>
+
         <q-btn dense flat size="md" round icon="refresh" @click="performRefresh" />
 
         <q-btn-toggle v-model="refreshTimeout" text-color="blue-grey-4" toggle-text-color="white" size="md" dense flat :options="refreshOptions" />
@@ -40,13 +44,15 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <transition name="fade">
+        <router-view />
+      </transition>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
   name: 'SwsUxLayout',
 
@@ -74,16 +80,37 @@ export default {
         { label: '15s', value: 15000 },
         { label: '30s', value: 30000 },
         { label: '1m', value: 60000 }
-      ]
+      ],
+      rotateEnabled: false,
+      rotateCurrent: 0,
+      rotateOptions: ['/', '/requests', '/errors']
     };
   },
   computed: {
+    ...mapState({
+      rotateTrigger: state => state.rotateTrigger
+    }),
     refreshTimeout: {
       get() {
         return this.$store.state.refreshTimeout;
       },
       set(value) {
         this.setRefreshTimeout({ timeout: value });
+      }
+    }
+  },
+  watch: {
+    rotateTrigger: {
+      handler: function() {
+        if (!this.rotateEnabled) {
+          return;
+        }
+        console.log(`Rotating screen: ${Date.now()}`);
+        this.rotateCurrent++;
+        if (this.rotateCurrent >= this.rotateOptions.length) {
+          this.rotateCurrent = 0;
+        }
+        this.$router.push(this.rotateOptions[this.rotateCurrent]);
       }
     }
   },
@@ -116,3 +143,12 @@ export default {
   }
 };
 </script>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

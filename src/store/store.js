@@ -10,7 +10,10 @@ export default new Vuex.Store({
     refreshTrigger: 0,
     refreshTimeout: 5000,
     refreshLast: 0,
-    intervalId: null
+    intervalId: null,
+    rotateTrigger: 0,
+    rotateLast: 0,
+    rotateTimeout: 15000
   },
   modules: {
     stats,
@@ -27,6 +30,10 @@ export default new Vuex.Store({
     PERFORM_REFRESH(state) {
       state.refreshLast = Date.now();
       state.refreshTrigger = state.refreshLast;
+    },
+    PERFORM_ROTATE(state) {
+      state.rotateLast = Date.now();
+      state.rotateTrigger = state.rotateLast;
     }
   },
   actions: {
@@ -44,6 +51,12 @@ export default new Vuex.Store({
         if (elapsed >= state.refreshTimeout - 100) {
           console.log(`Need to refresh: ${tsNow} - ${elapsed}`);
           commit('PERFORM_REFRESH');
+        }
+        // If we're almost at rotate interval, rotate
+        let rotateElapsed = tsNow - state.rotateLast;
+        if (rotateElapsed >= state.rotateTimeout - 100) {
+          console.log(`Need to rotate: ${tsNow} - ${rotateElapsed}`);
+          commit('PERFORM_ROTATE');
         }
       }, 1000);
       commit('SET_INTERVAL_ID', { id: intervalId });

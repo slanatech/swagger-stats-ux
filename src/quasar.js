@@ -31,7 +31,8 @@ import {
   QTable,
   QCard,
   QCardSection,
-  QSelect
+  QSelect,
+  QToggle
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -60,7 +61,8 @@ Vue.use(Quasar, {
     QTable,
     QCard,
     QCardSection,
-    QSelect
+    QSelect,
+    QToggle
   },
   directives: {},
   plugins: {}
