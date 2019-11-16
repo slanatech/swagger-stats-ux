@@ -6,6 +6,8 @@ export default {
   extends: RRRTableWithPreview,
   data() {
     return {
+      title: 'Longest Requests',
+      icon: 'hourglass_empty',
       statsField: 'longestreq',
       sortField: 'responsetime',
       sortOrder: 'desc'

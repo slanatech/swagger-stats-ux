@@ -6,6 +6,8 @@ export default {
   extends: RRRTableWithPreview,
   data() {
     return {
+      title: 'Last Errors',
+      icon: 'error_outline',
       statsField: 'lasterrors',
       sortField: '@timestamp',
       sortOrder: 'desc'

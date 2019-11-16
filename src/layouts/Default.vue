@@ -57,15 +57,14 @@ export default {
       rightShown: false,
       menuItems: [
         { title: 'Summary', link: '/', icon: 'timeline' },
-        { title: 'Horizon', link: '/horizon', icon: 'waves' },
         { title: 'Requests', link: '/requests', icon: 'sync_alt' },
         { title: 'Errors', link: '/errors', icon: 'error' },
         { title: 'Last Errors', link: '/lasterrors', icon: 'error_outline' },
         { title: 'Longest Requests', link: '/longestrequests', icon: 'hourglass_empty' },
         { title: 'Rates & Durations', link: '/rates', icon: 'schedule' },
         { title: 'API', link: '/api', icon: 'code' },
-        { title: 'API Responses', link: '/apiopcodes', icon: 'pie_chart' },
-        { title: 'API Operation', link: '/apiop', icon: 'radio_button_checked' },
+        { title: 'API Responses', link: '/apiresponses', icon: 'pie_chart' },
+        { title: 'API Operation', link: '/apiop', icon: 'settings_ethernet' },
         { title: 'Payload', link: '/payload', icon: 'swap_vert' }
       ],
       refreshOptions: [

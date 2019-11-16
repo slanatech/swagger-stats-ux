@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    <title-bar title="API Responses" icon="pie_chart"></title-bar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
 </template>
@@ -9,15 +10,15 @@
 import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 // Prod
 // import { DbData, DbDashboard } from 'dashblocks';
-import { pathOr } from 'ramda';
+import TitleBar from '@/components/titlebar.vue';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
-import utils from '@/utils.js';
 
 export default {
-  name: 'ApiOpCodes',
+  name: 'ApiResponses',
   components: {
-    DbDashboard
+    DbDashboard,
+    TitleBar
   },
   data() {
     return {

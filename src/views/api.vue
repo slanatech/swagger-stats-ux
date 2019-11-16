@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    <title-bar title="API" icon="code"></title-bar>
     <div style="padding: 4px;">
       <vue-good-table
         :columns="columns"
@@ -37,13 +38,16 @@
 </template>
 
 <script>
+import TitleBar from '@/components/titlebar.vue';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import { vgtMethods } from '../mixins/vgtmethods';
 
 export default {
   name: 'ApiView',
-  components: {},
+  components: {
+    TitleBar
+  },
   mixins: [vgtMethods],
   data() {
     return {

@@ -30,7 +30,8 @@ import {
   QTooltip,
   QTable,
   QCard,
-  QCardSection
+  QCardSection,
+  QSelect
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -58,7 +59,8 @@ Vue.use(Quasar, {
     QTooltip,
     QTable,
     QCard,
-    QCardSection
+    QCardSection,
+    QSelect
   },
   directives: {},
   plugins: {}

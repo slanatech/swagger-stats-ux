@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    <title-bar title="Rates & Durations" icon="schedule"></title-bar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
 </template>
@@ -9,6 +10,7 @@
 import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 // Prod
 // import { DbData, DbDashboard } from 'dashblocks';
+import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
@@ -16,7 +18,8 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'SummaryView',
   components: {
-    DbDashboard
+    DbDashboard,
+    TitleBar
   },
   data() {
     return {
@@ -117,7 +120,7 @@ export default {
   watch: {
     refreshTrigger: {
       handler: function() {
-        this.getStats({ fields: ['timeline', 'apidefs'] });
+        this.getStats({ fields: ['timeline'] });
       }
     },
     statsUpdated: {
@@ -129,7 +132,7 @@ export default {
   },
   mounted() {
     this.initialize();
-    this.getStats({ fields: ['timeline', 'apidefs'] });
+    this.getStats({ fields: ['timeline'] });
     this.ready = true;
   },
   methods: {

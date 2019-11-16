@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    <title-bar title="Requests" icon="sync_alt"></title-bar>
     <div style="padding: 4px;margin-bottom: 16px;">
       <vue-good-table :columns="columns" :rows="rows" styleClass="vgt-table condensed bordered striped sws-table"> </vue-good-table>
     </div>
@@ -12,6 +13,7 @@
 import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 // Prod
 // import { DbData, DbDashboard } from 'dashblocks';
+import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
@@ -20,6 +22,7 @@ import { vgtMethods } from '../mixins/vgtmethods';
 export default {
   name: 'ApiView',
   components: {
+    TitleBar,
     DbDashboard
   },
   mixins: [vgtMethods],

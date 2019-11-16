@@ -1,5 +1,18 @@
 <template>
   <q-page padding>
+    <q-toolbar class="bg-grey-3 rounded-borders bor" style="margin: 4px 4px 4px 0px;">
+      <q-icon class="text-primary" name="settings_ethernet" size="sm" />
+      <q-toolbar-title> {{ apiOpMethod }} {{ apiOpPath }} </q-toolbar-title>
+      <q-select bg-color="white" class="col-4" filled dense v-model="selection" use-input hide-selected fill-input input-debounce="0" :options="options" @filter="filterFn">
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No results
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+    </q-toolbar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
 </template>
@@ -25,6 +38,9 @@ export default {
       isDark: false,
       apiOpMethod: null,
       apiOpPath: null,
+      allOptions: null,
+      options: ['None'],
+      selection: null,
       dbdata: new DbData(),
       dbspec: {
         layout: {
@@ -153,7 +169,7 @@ export default {
     refreshTrigger: {
       handler: function() {
         // TODO Enable
-        //this.getStats({ fields: ['apiop'], method: this.apiOpMethod, path: this.apiOpPath });
+        this.getStats({ fields: ['apiop'], method: this.apiOpMethod, path: this.apiOpPath });
       }
     },
     statsUpdated: {
@@ -161,13 +177,28 @@ export default {
         console.log(`stats updated`);
         this.updateStats();
       }
+    },
+    selection: {
+      handler: function(val) {
+        console.log(`selection updated ${val}`);
+        if (val) {
+          let parts = val.split(' ');
+          this.apiOpMethod = parts[0];
+          this.apiOpPath = parts[1];
+          this.getStats({ fields: ['apiop'], method: this.apiOpMethod, path: this.apiOpPath });
+        }
+      }
     }
   },
   mounted() {
     this.apiOpMethod = this.$route.query.method || null;
     this.apiOpPath = this.$route.query.path || null;
     this.initialize();
-    this.getStats({ fields: ['apiop'], method: this.apiOpMethod, path: this.apiOpPath });
+    if (this.apiOpMethod && this.apiOpPath) {
+      this.getStats({ fields: ['apiop', 'apidefs'], method: this.apiOpMethod, path: this.apiOpPath });
+    } else {
+      this.getStats({ fields: ['apidefs'] });
+    }
     this.ready = true;
   },
   methods: {
@@ -198,7 +229,32 @@ export default {
     },
 
     updateStats: function() {
-      // Update numbers
+      // Update selector
+      let apiDefs = pathOr(null, ['apidefs'], statsContainer);
+      let needStatsReload = false;
+      let allOptions = [];
+      if (apiDefs) {
+        for (let apiPath of Object.keys(apiDefs)) {
+          for (let apiMethod of Object.keys(apiDefs[apiPath])) {
+            if (!this.apiOpMethod && !this.apiOpPath) {
+              this.apiOpMethod = apiMethod;
+              this.apiOpPath = apiPath;
+              needStatsReload = true;
+            }
+            allOptions.push(`${apiMethod} ${apiPath}`);
+          }
+        }
+        this.allOptions = allOptions;
+      }
+
+      if (needStatsReload) {
+        this.getStats({ fields: ['apiop'], method: this.apiOpMethod, path: this.apiOpPath });
+        return;
+      }
+
+      this.selection = `${this.apiOpMethod} ${this.apiOpPath}`;
+
+      // Update dashboard
       let apiOpData = pathOr(null, ['apiop', this.apiOpPath, this.apiOpMethod], statsContainer);
       if (!apiOpData) {
         return;
@@ -244,6 +300,13 @@ export default {
       let paramNames = Object.keys(pathOr({}, ['parameters'], apiOpDetails));
       this.dbdata['w29'].data = paramNames.map(x => pathOr(0, ['parameters', x], apiOpDetails));
       this.dbdata.touch('w29');
+    },
+
+    filterFn(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase();
+        this.options = this.allOptions.filter(v => v.toLowerCase().indexOf(needle) > -1);
+      });
     }
   }
 };

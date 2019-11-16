@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    <title-bar title="Payload" icon="swap_vert"></title-bar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
 </template>
@@ -9,6 +10,7 @@
 import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
 // Prod
 // import { DbData, DbDashboard } from 'dashblocks';
+import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
@@ -17,7 +19,8 @@ import utils from '@/utils.js';
 export default {
   name: 'SummaryView',
   components: {
-    DbDashboard
+    DbDashboard,
+    TitleBar
   },
   data() {
     return {

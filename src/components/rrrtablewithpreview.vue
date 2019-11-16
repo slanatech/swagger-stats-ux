@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    <title-bar :title="title" :icon="icon"></title-bar>
     <q-splitter v-model="splitterModel" :limits="[50, 100]" after-class="q-splitter-panel-height-auto">
       <template v-slot:before>
         <div style="padding: 4px;">
@@ -55,7 +56,10 @@
                     </q-item-section>
 
                     <q-item-section side>
-                      <q-btn flat round icon="clear" size="sm" v-on:click.stop="handleClear(index)" />
+                      <q-btn-group>
+                        <q-btn flat round icon="filter_none" size="sm" v-on:click.stop="handleCopy(index)" />
+                        <q-btn flat round icon="clear" size="sm" v-on:click.stop="handleClear(index)" />
+                      </q-btn-group>
                     </q-item-section>
                   </template>
                   <q-card>
@@ -75,6 +79,7 @@
 </template>
 
 <script>
+import TitleBar from '@/components/titlebar.vue';
 import { pathOr, propEq, findIndex } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
@@ -86,11 +91,15 @@ import 'prismjs/components/prism-json';
 
 export default {
   name: 'LastErrorsView',
-  components: {},
+  components: {
+    TitleBar
+  },
   mixins: [vgtMethods],
   data() {
     return {
       splitterModel: 100, // start at 50%
+      title: 'Last Errors',
+      icon: 'error_outline',
       statsField: 'lasterrors',
       sortField: '@timestamp',
       sortOrder: 'desc',
@@ -215,6 +224,15 @@ export default {
       this.expanded.splice(index, 1);
       this.removeStoredItem({ index: index });
     },
+    handleCopy(index) {
+      let tempInput = document.createElement('textarea');
+      tempInput.style = 'position: absolute; left: -1000px; top: -1000px';
+      tempInput.value = JSON.stringify(this.storedItems[index].data, null, 2);
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    },
     updateStats: function() {
       // Update numbers
       //let requestsTotal = pathOr(0, ['all', 'requests'], statsContainer);
@@ -229,3 +247,6 @@ export default {
   }
 };
 </script>
+
+
+
