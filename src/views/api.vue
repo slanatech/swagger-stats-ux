@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="sws-page-padding">
     <title-bar title="API" icon="code"></title-bar>
     <div style="padding: 4px;">
       <vue-good-table

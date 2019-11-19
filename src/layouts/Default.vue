@@ -44,7 +44,7 @@
     </q-drawer>
 
     <q-page-container>
-      <transition name="fade">
+      <transition :name="transitionName">
         <router-view />
       </transition>
     </q-page-container>
@@ -61,17 +61,18 @@ export default {
       miniState: true,
       leftShown: true,
       rightShown: false,
+      transitionName: '',
       menuItems: [
-        { title: 'Summary', link: '/', icon: 'timeline' },
+        { title: 'Summary', link: '/', icon: 'trending_up' },
         { title: 'Requests', link: '/requests', icon: 'sync_alt' },
         { title: 'Errors', link: '/errors', icon: 'error' },
-        { title: 'Last Errors', link: '/lasterrors', icon: 'error_outline' },
-        { title: 'Longest Requests', link: '/longestrequests', icon: 'hourglass_empty' },
-        { title: 'Rates & Durations', link: '/rates', icon: 'schedule' },
         { title: 'API', link: '/api', icon: 'code' },
-        { title: 'API Responses', link: '/apiresponses', icon: 'pie_chart' },
         { title: 'API Operation', link: '/apiop', icon: 'settings_ethernet' },
-        { title: 'Payload', link: '/payload', icon: 'swap_vert' }
+        { title: 'API Responses', link: '/apiresponses', icon: 'pie_chart' },
+        { title: 'Rates & Durations', link: '/rates', icon: 'schedule' },
+        { title: 'Payload', link: '/payload', icon: 'swap_vert' },
+        { title: 'Last Errors', link: '/lasterrors', icon: 'error_outline' },
+        { title: 'Longest Requests', link: '/longestrequests', icon: 'hourglass_empty' }
       ],
       refreshOptions: [
         { icon: 'pause', value: 0 },
@@ -82,8 +83,8 @@ export default {
         { label: '1m', value: 60000 }
       ],
       rotateEnabled: false,
-      rotateCurrent: 0,
-      rotateOptions: ['/', '/requests', '/errors']
+      rotateCurrent: -1,
+      rotateOptions: ['/', '/requests', '/errors', '/api', '/apiresponses', '/rates', '/payload']
     };
   },
   computed: {
@@ -100,6 +101,13 @@ export default {
     }
   },
   watch: {
+    rotateEnabled: {
+      handler: function(val) {
+        if (val) {
+          this.rotateCurrent = -1;
+        }
+      }
+    },
     rotateTrigger: {
       handler: function() {
         if (!this.rotateEnabled) {
@@ -110,7 +118,13 @@ export default {
         if (this.rotateCurrent >= this.rotateOptions.length) {
           this.rotateCurrent = 0;
         }
+        this.transitionName = 'fade';
         this.$router.push(this.rotateOptions[this.rotateCurrent]);
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.transitionName = '';
+          }, 550);
+        });
       }
     }
   },

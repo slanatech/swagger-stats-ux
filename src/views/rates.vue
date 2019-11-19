@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="sws-page-padding">
     <title-bar title="Rates & Durations" icon="schedule"></title-bar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
@@ -66,7 +66,7 @@ export default {
             id: 'w14',
             type: 'DbDygraphsLine',
             cspan: 12,
-            height: 140,
+            height: 200,
             properties: {
               options: {
                 stackedGraph: false,

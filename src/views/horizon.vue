@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="sws-page-padding">
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
 </template>

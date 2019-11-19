@@ -73,3 +73,11 @@ table.vgt-table.sws-table {
   transition:all 2s;
   -webkit-transition:all 2s;
 }
+
+.sws-page-padding
+  @media (max-width: $breakpoint-xs-max)
+    padding: 0px 8px 8px 8px;
+  @media (min-width: $breakpoint-sm-min) and (max-width: $breakpoint-md-max)
+    padding: 0px 16px 16px 16px;
+  @media (min-width: $breakpoint-lg-min)
+    padding: 0px 24px 24px 24px;

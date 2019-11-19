@@ -13,6 +13,7 @@ import {
   QDrawer,
   QPageContainer,
   QPage,
+  QPageSticky,
   QToolbar,
   QToolbarTitle,
   QBtn,
@@ -32,7 +33,8 @@ import {
   QCard,
   QCardSection,
   QSelect,
-  QToggle
+  QToggle,
+  QBadge
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -43,6 +45,7 @@ Vue.use(Quasar, {
     QDrawer,
     QPageContainer,
     QPage,
+    QPageSticky,
     QToolbar,
     QToolbarTitle,
     QBtn,
@@ -62,7 +65,8 @@ Vue.use(Quasar, {
     QCard,
     QCardSection,
     QSelect,
-    QToggle
+    QToggle,
+    QBadge
   },
   directives: {},
   plugins: {}

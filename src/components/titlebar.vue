@@ -3,6 +3,10 @@
     <q-icon class="text-primary" :name="icon" size="sm"/>
     <!--<q-avatar :icon="icon" color="primary" text-color="white" size="md"/>-->
     <q-toolbar-title> {{ title }} </q-toolbar-title>
+    <q-space></q-space>
+    <div class="text-caption">
+      powered by <a href="https://dashblocks.io" target="blank">dashblocks</a>
+    </div>
   </q-toolbar>
 </template>
 

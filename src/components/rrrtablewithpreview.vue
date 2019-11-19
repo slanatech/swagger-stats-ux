@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="sws-page-padding">
     <title-bar :title="title" :icon="icon"></title-bar>
     <q-splitter v-model="splitterModel" :limits="[50, 100]" after-class="q-splitter-panel-height-auto">
       <template v-slot:before>

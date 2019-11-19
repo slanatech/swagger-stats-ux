@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="sws-page-padding">
     <title-bar title="Requests" icon="sync_alt"></title-bar>
     <div style="padding: 4px;margin-bottom: 16px;">
       <vue-good-table :columns="columns" :rows="rows" styleClass="vgt-table condensed bordered striped sws-table"> </vue-good-table>

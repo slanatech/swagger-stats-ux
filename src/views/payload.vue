@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page class="sws-page-padding">
     <title-bar title="Payload" icon="swap_vert"></title-bar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
@@ -35,15 +35,6 @@ export default {
         // prettier-ignore
         widgets: [
 
-          { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Received', subtitle: 'Total received', format: '%.2f %s'}},
-          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Sent', subtitle: 'Total Sent', format: '%.2f %s' } },
-
-          { id: 'w2', type: 'DbNumber', cspan: 2, properties: { title: 'Avg Req Payload', subtitle: 'Avg Req Content Len', format: '%f', icon: 'fa fa-exchange-alt' } },
-          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Avg Res Payload', subtitle: 'Avg Res Content Len', format: '%f' } },
-
-          { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'Max Req Payload', subtitle: 'Max Req Content Len', format: '%f', icon: 'fa fa-exclamation' } },
-          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Max Res Payload', subtitle: 'Max Res Content Len', format: '%f',icon: 'fa fa-hourglass-half' } },
-
           {
             id: 'w14',
             type: 'DbDygraphsBar',
@@ -59,6 +50,16 @@ export default {
               }
             }
           },
+
+          { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Received', subtitle: 'Total received', format: '%.2f %s'}},
+          { id: 'w4', type: 'DbNumber', cspan: 2, properties: { title: 'Sent', subtitle: 'Total Sent', format: '%.2f %s' } },
+
+          { id: 'w2', type: 'DbNumber', cspan: 2, properties: { title: 'Avg Req Payload', subtitle: 'Avg Req Content Len', format: '%f', icon: 'fa fa-exchange-alt' } },
+          { id: 'w3', type: 'DbNumber', cspan: 2, properties: { title: 'Avg Res Payload', subtitle: 'Avg Res Content Len', format: '%f' } },
+
+          { id: 'w5', type: 'DbNumber', cspan: 2, properties: { title: 'Max Req Payload', subtitle: 'Max Req Content Len', format: '%f', icon: 'fa fa-exclamation' } },
+          { id: 'w6', type: 'DbNumber', cspan: 2, properties: { title: 'Max Res Payload', subtitle: 'Max Res Content Len', format: '%f',icon: 'fa fa-hourglass-half' } },
+
           {
             id: 'w15',
             type: 'DbDygraphsLine',

@@ -1,6 +1,6 @@
 <template>
-  <q-page padding>
-    <title-bar title="Summary" icon="timeline"></title-bar>
+  <q-page class="sws-page-padding">
+    <title-bar title="Summary" icon="trending_up"></title-bar>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
   </q-page>
 </template>
@@ -34,6 +34,21 @@ export default {
         },
         // prettier-ignore
         widgets: [
+          {
+            id: 'w16',
+            type: 'DbDygraphsBar',
+            cspan: 12,
+            height: 250,
+            properties: {
+              options: {
+                stackedGraph: true,
+                title: 'Traffic',
+                ylabel: 'Requests',
+                labels: ['Date', 'Success', 'Redirect', 'Client Error','Server Error'],
+                legend: 'always'
+              }
+            }
+          },
           { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Requests', subtitle: 'Total requests received', icon: 'fa fa-signal' } },
           { id: 'w2', type: 'DbNumber', cspan: 2, properties: {
             title: 'Apdex Score', subtitle: 'Overall Apdex Score', total: 1, trendMax: 1, format: '%.2f',
@@ -64,8 +79,8 @@ export default {
           {
             id: 'w14',
             type: 'DbDygraphsLine',
-            cspan: 12,
-            height: 140,
+            cspan: 6,
+            height: 180,
             properties: {
               options: {
                 stackedGraph: false,
@@ -76,24 +91,24 @@ export default {
             }
           },
           {
-            id: 'w17',
+            id: 'w18',
             type: 'DbDygraphsLine',
-            cspan: 12,
-            height: 140,
+            cspan: 6,
+            height: 180,
             properties: {
               options: {
                 stackedGraph: false,
-                title: 'Event Loop Lag',
-                ylabel: 'msec',
-                labels: ['Date','Lag']
+                title: 'Apdex Score',
+                ylabel: 'Score',
+                labels: ['Date','Apdex Score']
               }
             }
           },
           {
             id: 'w15',
             type: 'DbDygraphsLine',
-            cspan: 12,
-            height: 140,
+            cspan: 6,
+            height: 180,
             properties: {
               options: {
                 stackedGraph: false,
@@ -104,20 +119,19 @@ export default {
             }
           },
           {
-            id: 'w16',
-            type: 'DbDygraphsBar',
-            cspan: 12,
-            height: 250,
+            id: 'w17',
+            type: 'DbDygraphsLine',
+            cspan: 6,
+            height: 180,
             properties: {
               options: {
-                stackedGraph: true,
-                title: 'Traffic',
-                ylabel: 'Requests',
-                labels: ['Date', 'Success', 'Redirect', 'Client Error','Server Error'],
-                legend: 'always'
+                stackedGraph: false,
+                title: 'Event Loop Lag',
+                ylabel: 'msec',
+                labels: ['Date','Lag']
               }
             }
-          }
+          },
         ]
       },
       ready: false
@@ -170,6 +184,7 @@ export default {
       this.dbdata.setWData('w15', { data: [] });
       this.dbdata.setWData('w16', { data: [] });
       this.dbdata.setWData('w17', { data: [] });
+      this.dbdata.setWData('w18', { data: [] });
     },
 
     updateStats: function() {
@@ -181,6 +196,8 @@ export default {
       let cpuData = [];
       let memData = [];
       let lagData = [];
+      let asData = [];
+
 
       let timelineSorted = statsContainer.getSortedTimeline();
       //let trendReqData =  [];
@@ -192,6 +209,7 @@ export default {
           pathOr(0, ['stats', 'client_error'], entry),
           pathOr(0, ['stats', 'server_error'], entry)
         ]);
+        asData.push([new Date(entry.ts), pathOr(0, ['stats', 'apdex_score'], entry)]);
         cpuData.push([new Date(entry.ts), pathOr(0, ['sys', 'cpu'], entry)]);
         memData.push([new Date(entry.ts), pathOr(0, ['sys', 'heapTotal'], entry) / 1048576, pathOr(0, ['sys', 'heapUsed'], entry) / 1048576]);
         lagData.push([new Date(entry.ts), pathOr(0, ['sys', 'lag'], entry)]);
@@ -235,6 +253,7 @@ export default {
       this.dbdata.setWData('w15', { data: memData });
       this.dbdata.setWData('w16', { data: dthData });
       this.dbdata.setWData('w17', { data: lagData });
+      this.dbdata.setWData('w18', { data: asData });
     },
 
     collapse: function(array, chunkSize) {

@@ -1,9 +1,9 @@
 <template>
-  <q-page padding>
-    <q-toolbar class="bg-grey-3 rounded-borders bor" style="margin: 4px 4px 4px 0px;">
+  <q-page class="sws-page-padding">
+    <q-toolbar style="margin: 4px 4px 4px 0px;">
       <q-icon class="text-primary" name="settings_ethernet" size="sm" />
       <q-toolbar-title> {{ apiOpMethod }} {{ apiOpPath }} </q-toolbar-title>
-      <q-select bg-color="white" class="col-4" filled dense v-model="selection" use-input hide-selected fill-input input-debounce="0" :options="options" @filter="filterFn">
+      <q-select bg-color="blue-grey-1" class="col-4" filled dense v-model="selection" use-input hide-selected fill-input input-debounce="0" :options="options" @filter="filterFn">
         <template v-slot:no-option>
           <q-item>
             <q-item-section class="text-grey">
