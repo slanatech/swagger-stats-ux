@@ -4,7 +4,7 @@
     <div style="padding: 4px;margin-bottom: 16px;">
       <vue-good-table :columns="columns" :rows="rows" styleClass="vgt-table condensed bordered striped sws-table"> </vue-good-table>
     </div>
-    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
+    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="dark"> </db-dashboard>
   </q-page>
 </template>
 
@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       timer: null,
-      isDark: false,
       columns: [
         { label: 'Method', field: 'method', tdClass: 'text-weight-bold' },
         { label: 'Requests', field: 'requests', type: 'number', tdClass: 'text-weight-bold' },
@@ -141,6 +140,7 @@ export default {
   },
   computed: {
     ...mapState({
+      dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })

@@ -1,7 +1,7 @@
 <template>
   <q-page class="sws-page-padding">
     <title-bar title="API Responses" icon="pie_chart"></title-bar>
-    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
+    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="dark"> </db-dashboard>
   </q-page>
 </template>
 
@@ -36,6 +36,7 @@ export default {
   },
   computed: {
     ...mapState({
+      dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })

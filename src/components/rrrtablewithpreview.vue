@@ -7,6 +7,7 @@
           <vue-good-table
             :columns="columns"
             :rows="rows"
+            :theme="vgtTheme"
             styleClass="vgt-table condensed bordered striped sws-table"
             :row-style-class="getRowClass"
             :search-options="{ enabled: true, skipDiacritics: true }"
@@ -64,7 +65,7 @@
                   </template>
                   <q-card>
                     <q-card-section>
-                      <pre><code class="language-json">{{JSON.stringify(item.data,null,'\t')}}</code></pre>
+                      <pre><code :class="codeClass">{{JSON.stringify(item.data,null,2)}}</code></pre>
                     </q-card-section>
                   </q-card>
                 </q-expansion-item>
@@ -85,8 +86,8 @@ import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import { vgtMethods } from '../mixins/vgtmethods';
 import Prism from 'prismjs';
-import 'prismjs/themes/prism.css';
 //import 'prismjs/themes/prism-tomorrow.css';
+//import 'prismjs/themes/prism.css';
 import 'prismjs/components/prism-json';
 
 export default {
@@ -130,10 +131,17 @@ export default {
   },
   computed: {
     ...mapState({
+      dark: state => state.dark,
       statsUpdated: state => state.stats.updated,
       storedItems: state => state.lasterrors.items,
       expandedState: state => state.lasterrors.expanded
-    })
+    }),
+    vgtTheme: function() {
+      return this.dark ? 'nocturnal' : 'default';
+    },
+    codeClass: function() {
+      return 'language-json ' + (this.dark ? 'sws-code-dark' : 'sws-code');
+    }
   },
   watch: {
     statsUpdated: {
@@ -247,6 +255,3 @@ export default {
   }
 };
 </script>
-
-
-

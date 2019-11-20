@@ -1,7 +1,7 @@
 <template>
   <q-page class="sws-page-padding">
     <title-bar title="Payload" icon="swap_vert"></title-bar>
-    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
+    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="dark"> </db-dashboard>
   </q-page>
 </template>
 
@@ -97,6 +97,7 @@ export default {
   },
   computed: {
     ...mapState({
+      dark: state => state.dark,
       statsUpdated: state => state.stats.updated,
       refreshTrigger: state => state.refreshTrigger
     })

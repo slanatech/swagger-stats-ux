@@ -5,6 +5,7 @@
       <vue-good-table
         :columns="columns"
         :rows="rows"
+        :theme="vgtTheme"
         styleClass="vgt-table condensed bordered striped sws-table"
         :search-options="{
           enabled: true,
@@ -78,9 +79,13 @@ export default {
   },
   computed: {
     ...mapState({
+      dark: state => state.dark,
       statsUpdated: state => state.stats.updated,
       refreshTrigger: state => state.refreshTrigger
-    })
+    }),
+    vgtTheme: function() {
+      return this.dark ? 'nocturnal' : 'default';
+    }
   },
   watch: {
     refreshTrigger: {

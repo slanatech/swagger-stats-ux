@@ -10,6 +10,10 @@
 
         <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
 
+        <q-toggle color="black" v-model="dark" icon="brightness_medium">
+          <q-tooltip anchor="bottom right" self="center middle">Dark Mode</q-tooltip>
+        </q-toggle>
+
         <q-toggle color="orange" v-model="rotateEnabled" icon="dynamic_feed">
           <q-tooltip anchor="bottom right" self="center middle">Auto-Rotate</q-tooltip>
         </q-toggle>
@@ -98,9 +102,22 @@ export default {
       set(value) {
         this.setRefreshTimeout({ timeout: value });
       }
+    },
+    dark: {
+      get() {
+        return this.$store.state.dark;
+      },
+      set(value) {
+        this.setDark({ dark: value });
+      }
     }
   },
   watch: {
+    dark: {
+      handler: function(val) {
+        this.$q.dark.set(val);
+      }
+    },
     rotateEnabled: {
       handler: function(val) {
         if (val) {
@@ -129,10 +146,12 @@ export default {
     }
   },
   mounted() {
+    this.$q.dark.set(this.dark);
     this.initRefresh();
   },
   methods: {
     ...mapActions({
+      setDark: 'setDark',
       initRefresh: 'initRefresh',
       setRefreshTimeout: 'setRefreshTimeout', // map `this.getStats()` to `... dispatch('getStats')`
       performRefresh: 'performRefresh'

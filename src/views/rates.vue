@@ -1,7 +1,7 @@
 <template>
   <q-page class="sws-page-padding">
     <title-bar title="Rates & Durations" icon="schedule"></title-bar>
-    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="isDark"> </db-dashboard>
+    <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="dark"> </db-dashboard>
   </q-page>
 </template>
 
@@ -24,7 +24,6 @@ export default {
   data() {
     return {
       timer: null,
-      isDark: false,
       dbdata: new DbData(),
       dbspec: {
         layout: {
@@ -113,6 +112,7 @@ export default {
   },
   computed: {
     ...mapState({
+      dark: state => state.dark,
       statsUpdated: state => state.stats.updated,
       refreshTrigger: state => state.refreshTrigger
     })

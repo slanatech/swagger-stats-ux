@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    dark: false,
     refreshTrigger: 0,
     refreshTimeout: 5000,
     refreshLast: 0,
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     longestrequests: RRRCollection
   },
   mutations: {
+    SET_DARK(state, { dark }) {
+      state.dark = dark;
+    },
     SET_INTERVAL_ID(state, { id }) {
       state.intervalId = id;
     },
@@ -37,6 +41,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setDark({ commit }, { dark }) {
+      commit('SET_DARK', { dark: dark });
+    },
     initRefresh({ commit, state }) {
       if (state.intervalId) {
         return; // Already set up
