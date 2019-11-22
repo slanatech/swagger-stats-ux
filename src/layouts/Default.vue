@@ -57,6 +57,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import { DbColors } from 'dashblocks_dev/src/components';
+
 export default {
   name: 'SwsUxLayout',
 
@@ -66,6 +68,7 @@ export default {
       leftShown: true,
       rightShown: false,
       transitionName: '',
+      testColors: null,
       menuItems: [
         { title: 'Summary', link: '/', icon: 'trending_up' },
         { title: 'Requests', link: '/requests', icon: 'sync_alt' },
@@ -146,6 +149,7 @@ export default {
     }
   },
   mounted() {
+    this.testColors = DbColors.getColors(true); // TEMP TODO REMOVE
     this.$q.dark.set(this.dark);
     this.initRefresh();
   },

@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    dark: false,
+    dark: (localStorage['sws-dark-mode'] || 'false') === 'true',
     refreshTrigger: 0,
     refreshTimeout: 5000,
     refreshLast: 0,
@@ -23,6 +23,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_DARK(state, { dark }) {
+      localStorage['sws-dark-mode'] = dark;
       state.dark = dark;
     },
     SET_INTERVAL_ID(state, { id }) {
