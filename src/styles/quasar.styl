@@ -2,6 +2,18 @@
 @import '~quasar-styl'
 // @import '~quasar-addon-styl'
 
+body.body--dark {
+  color: $grey-6;
+}
+
+.q-item {
+  color: $blue-grey-8;
+}
+
+.q-item--dark {
+  color: $blue-grey-4;
+}
+
 a {
   color: $primary;
   text-decoration: none;
@@ -14,6 +26,10 @@ a:hover {
 
 table.vgt-table.sws-table {
  font-size: 14px;
+}
+
+table.vgt-table.sws-table.nocturnal {
+  background-color: $grey-10;
 }
 
 .sws-td-badge span {
@@ -31,6 +47,7 @@ table.vgt-table.sws-table {
   opacity: 0.7;
   color: black;
 }
+
 
 .nowrap {
   white-space: nowrap;
@@ -60,6 +77,12 @@ table.vgt-table.sws-table {
           #ffffff 51%,
           #f5f2f0 100%
   );
+}
+
+.sws-toolbar-bg {
+  background: #0F2027; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .sws-css-bar {

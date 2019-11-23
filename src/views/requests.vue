@@ -2,7 +2,7 @@
   <q-page class="sws-page-padding">
     <title-bar title="Requests" icon="sync_alt"></title-bar>
     <div style="padding: 4px;margin-bottom: 16px;">
-      <vue-good-table :columns="columns" :rows="rows" styleClass="vgt-table condensed bordered striped sws-table"> </vue-good-table>
+      <vue-good-table :columns="columns" :rows="rows" :theme="vgtTheme" styleClass="vgt-table condensed bordered striped sws-table"> </vue-good-table>
     </div>
     <db-dashboard v-if="ready" :dbspec="dbspec" :dbdata="dbdata" :dark="dark"> </db-dashboard>
   </q-page>
@@ -143,7 +143,10 @@ export default {
       dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
-    })
+    }),
+    vgtTheme: function() {
+      return this.dark ? 'nocturnal' : 'default';
+    }
   },
   watch: {
     refreshTrigger: {

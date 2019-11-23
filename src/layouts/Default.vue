@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-primary text-white" height-hint="98">
+    <q-header class="text-grey-4 sws-toolbar-bg" height-hint="98">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="leftShown = !leftShown" />
 
@@ -10,23 +10,23 @@
 
         <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
 
-        <q-toggle color="black" v-model="dark" icon="brightness_medium">
+        <q-toggle v-model="dark" icon="brightness_medium">
           <q-tooltip anchor="bottom right" self="center middle">Dark Mode</q-tooltip>
         </q-toggle>
 
-        <q-toggle color="orange" v-model="rotateEnabled" icon="dynamic_feed">
+        <q-toggle v-model="rotateEnabled" icon="dynamic_feed">
           <q-tooltip anchor="bottom right" self="center middle">Auto-Rotate</q-tooltip>
         </q-toggle>
 
         <q-btn dense flat size="md" round icon="refresh" @click="performRefresh" />
 
-        <q-btn-toggle v-model="refreshTimeout" text-color="blue-grey-4" toggle-text-color="white" size="md" dense flat :options="refreshOptions" />
+        <q-btn-toggle v-model="refreshTimeout" text-color="blue-grey-8" toggle-text-color="grey-4" size="md" dense flat :options="refreshOptions" />
       </q-toolbar>
     </q-header>
 
     <q-drawer show-if-above :mini="miniState" v-model="leftShown" side="left" bordered @on-layout="handleLeftLayout">
       <q-list>
-        <q-item v-for="item in menuItems" v-bind:key="item.link" :to="item.link" exact>
+        <q-item clickable v-ripple v-for="item in menuItems" v-bind:key="item.link" :to="item.link" exact>
           <q-item-section avatar>
             <q-icon :name="item.icon">
               <q-tooltip anchor="top right" self="center middle">
