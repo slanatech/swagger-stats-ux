@@ -6,6 +6,10 @@ body.body--dark {
   color: $grey-6;
 }
 
+.q-dark {
+  color: $grey-6;
+}
+
 .q-item {
   color: $blue-grey-8;
 }
@@ -30,6 +34,14 @@ table.vgt-table.sws-table {
 
 table.vgt-table.sws-table.nocturnal {
   background-color: $grey-10;
+}
+
+table.vgt-table.sws-table.nocturnal td {
+  color: $grey-5;
+}
+
+table.vgt-table.sws-table.nocturnal th {
+  color: $grey-4;
 }
 
 .sws-td-badge span {
@@ -62,13 +74,17 @@ table.vgt-table.sws-table.nocturnal {
 }
 
 .sws-bg-gradient-a3a1a3 {
-  background-image: linear-gradient(
-          to right,
-          $amber-3 0%,
-          $amber-1 51%,
-          $amber-3 100%
-  );
+  background: $amber-3;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, $amber-1, $amber-2, $amber-3);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, $amber-1, $amber-2, $amber-3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
+.body--dark .sws-bg-gradient-a3a1a3 {
+  background: #0F2027; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
 
 .sws-bg-gradient1 {
   background-image: linear-gradient(

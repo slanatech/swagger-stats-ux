@@ -8,6 +8,8 @@ import '@quasar/extras/eva-icons/eva-icons.css';
 
 import {
   Quasar,
+  Ripple,
+  LoadingBar,
   QLayout,
   QHeader,
   QDrawer,
@@ -34,7 +36,8 @@ import {
   QCardSection,
   QSelect,
   QToggle,
-  QBadge
+  QBadge,
+  QSpace
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -66,8 +69,13 @@ Vue.use(Quasar, {
     QCardSection,
     QSelect,
     QToggle,
-    QBadge
+    QBadge,
+    QSpace
   },
-  directives: {},
-  plugins: {}
+  directives: {
+    Ripple
+  },
+  plugins: {
+    LoadingBar
+  }
 });

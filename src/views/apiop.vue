@@ -3,7 +3,7 @@
     <q-toolbar style="margin: 4px 4px 4px 0px;">
       <q-icon class="text-primary" name="settings_ethernet" size="sm" />
       <q-toolbar-title> {{ apiOpMethod }} {{ apiOpPath }} </q-toolbar-title>
-      <q-select bg-color="blue-grey-1" class="col-4" filled dense v-model="selection" use-input hide-selected fill-input input-debounce="0" :options="options" @filter="filterFn">
+      <q-select :dark="dark" class="col-4" filled dense spellcheck="false" v-model="selection" use-input hide-selected fill-input input-debounce="0" :options="options" @filter="filterFn">
         <template v-slot:no-option>
           <q-item>
             <q-item-section class="text-grey">

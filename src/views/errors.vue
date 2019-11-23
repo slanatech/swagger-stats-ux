@@ -102,6 +102,7 @@ export default {
             properties: {
               title: "Top Not Found (404)",
               "hide-bottom": false,
+              color: 'primary',
               dense: true,
               flat: true,
               columns: [
