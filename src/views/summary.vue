@@ -44,7 +44,8 @@ export default {
                 title: 'Traffic',
                 ylabel: 'Requests',
                 labels: ['Date', 'Success', 'Redirect', 'Client Error','Server Error'],
-                legend: 'always'
+                legend: 'always',
+                dbOpacity: 0.4
               }
             }
           },
