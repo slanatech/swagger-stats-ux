@@ -45,8 +45,8 @@ export default {
                 ylabel: 'Requests',
                 labels: ['Date', 'Success', 'Redirect', 'Client Error','Server Error'],
                 legend: 'always',
-                dbOpacity: 0.4
-              }
+              },
+              opacity: 0.5
             }
           },
           { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Requests', subtitle: 'Total requests received', icon: 'fa fa-signal' } },

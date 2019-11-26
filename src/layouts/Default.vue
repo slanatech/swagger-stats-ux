@@ -15,7 +15,7 @@
         </q-toggle>
 
         <q-toggle v-model="rotateEnabled" icon="dynamic_feed">
-          <q-tooltip anchor="bottom right" self="center middle">Auto-Rotate</q-tooltip>
+          <q-tooltip anchor="bottom right" self="center middle">Slide show</q-tooltip>
         </q-toggle>
 
         <q-btn dense flat size="md" round icon="refresh" @click="performRefresh" />
