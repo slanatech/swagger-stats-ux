@@ -201,7 +201,6 @@ export default {
       this.dbdata.setWData('wE4', { value: pathOr(0, ['all', 'client_error'], statsContainer), trend: trendsData[2], trendMax: reqTrendMax, total: requestsTotal });
       this.dbdata.setWData('wE5', { value: pathOr(0, ['all', 'server_error'], statsContainer), trend: trendsData[3], trendMax: reqTrendMax, total: requestsTotal });
 
-
       let errorsData = pathOr(null, ['errors'], statsContainer);
       if (!errorsData) {
         return;

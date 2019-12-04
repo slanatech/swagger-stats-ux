@@ -67,7 +67,7 @@ export default {
       let apiOps = statsContainer.getApiStatsArray();
       let dbWidgets = [];
       let dbWdigetsData = [];
-      let idx=0;
+      let idx = 0;
       for (let apiOp of apiOps) {
         let wid = `w${idx++}`;
         let wdef = {
@@ -83,12 +83,12 @@ export default {
           }
         };
         dbWidgets.push(wdef);
-        let wData = { labels: ['2XX','3XX','4XX','5XX'], datasets: [{ data: [] }] };
+        let wData = { labels: ['2XX', '3XX', '4XX', '5XX'], datasets: [{ data: [] }] };
         wData.datasets[0].data.push(apiOp.success);
         wData.datasets[0].data.push(apiOp.redirect);
         wData.datasets[0].data.push(apiOp.client_error);
         wData.datasets[0].data.push(apiOp.server_error);
-        this.dbdata.setWData(wid,{data: wData});
+        this.dbdata.setWData(wid, { data: wData });
       }
       this.dbspec.widgets = dbWidgets;
     }
