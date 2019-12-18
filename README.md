@@ -1,39 +1,17 @@
-# test-ux
+# swagger-stats UX
 
-## Project setup
-```
-yarn install
-```
+####  [https://swaggerstats.io](https://swaggerstats.io) | [Guide](https://swaggerstats.io/guide/) 
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+[![npm version](https://badge.fury.io/js/swagger-stats.svg)](https://badge.fury.io/js/swagger-stats)
+[![npm downloads](https://img.shields.io/npm/dm/swagger-stats.svg)](https://img.shields.io/npm/dm/swagger-stats)
+[![Gitter](https://badges.gitter.im/swagger-stats/community.svg)](https://gitter.im/swagger-stats/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-### Compiles and minifies for production
-```
-yarn run build
-```
 
-### Run your tests
-```
-yarn run test
-```
+## API Telemetry and APM 
 
-### Lints and fixes files
-```
-yarn run lint
-```
+> Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices
 
-### Run your end-to-end tests
-```
-yarn run test:e2e
-```
 
-### Run your unit tests
-```
-yarn run test:unit
-```
+This repository contains new UX for [swagger-stats](https://swaggerstats.io)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+

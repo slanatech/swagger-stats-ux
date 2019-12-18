@@ -43,8 +43,7 @@
       </q-list>
     </q-drawer>
 
-    <q-drawer v-model="rightShown" side="right" bordered>
-    </q-drawer>
+    <q-drawer v-model="rightShown" side="right" bordered> </q-drawer>
 
     <q-page-container>
       <transition :name="transitionName">
