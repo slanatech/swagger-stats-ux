@@ -9,9 +9,12 @@
 
 ## API Telemetry and APM 
 
-> Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices
+
+### New UX for [swagger-stats](https://github.com/slanatech/swagger-stats), made with [Vue](https://vuejs.org/), powered by [dashblocks](https://dashblocks.io/) 
+[https://dashblocks.io/](https://dashblocks.io/)
+
+![swagger-stats-ux](screenshots/swsux.gif?raw=true)
 
 
-This repository contains new UX for [swagger-stats](https://swaggerstats.io)
 
 
