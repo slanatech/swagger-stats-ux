@@ -7,9 +7,7 @@
 
 <script>
 // Development
-import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
-// Prod
-// import { DbData, DbDashboard } from 'dashblocks';
+import { DbData } from 'dashblocks';
 import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
@@ -19,7 +17,6 @@ import utils from '@/utils.js';
 export default {
   name: 'SummaryView',
   components: {
-    DbDashboard,
     TitleBar
   },
   data() {
@@ -110,7 +107,6 @@ export default {
     },
     statsUpdated: {
       handler: function() {
-        console.log(`stats updated`);
         this.updateStats();
       }
     }

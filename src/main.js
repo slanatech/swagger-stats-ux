@@ -7,11 +7,47 @@ import 'vue-good-table/dist/vue-good-table.css';
 
 import './quasar';
 
-// Dashblocks CSS
-//import '../../dashblocks/dist/dashblocks.css';
+import {
+  DashBlocks,
+  DbDashboard,
+  DbChartjsBar,
+  DbChartjsHorizontalBar,
+  DbChartjsDoughnut,
+  DbChartjsLine,
+  DbChartjsPie,
+  DbChartjsPolarArea,
+  DbChartjsRadar,
+  DbChartjsBubble,
+  DbChartjsScatter,
+  DbNumber,
+  DbEasyPie,
+  DbSparkline,
+  DbDygraphsBar,
+  DbDygraphsLine
+} from 'dashblocks';
 
-// TEMP - for development
-//import '../../dashblocks/dist/dashblocks.css';
+Vue.use(DashBlocks, {
+  components: {
+    DbDashboard,
+    DbChartjsBar,
+    DbChartjsHorizontalBar,
+    DbChartjsDoughnut,
+    DbChartjsLine,
+    DbChartjsPie,
+    DbChartjsPolarArea,
+    DbChartjsRadar,
+    DbChartjsBubble,
+    DbChartjsScatter,
+    DbNumber,
+    DbEasyPie,
+    DbSparkline,
+    DbDygraphsBar,
+    DbDygraphsLine
+  }
+});
+
+// Dashblocks CSS
+import 'dashblocks/dist/dashblocks.css';
 
 Vue.config.productionTip = false;
 

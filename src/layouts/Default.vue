@@ -8,7 +8,7 @@
           swagger-stats
         </q-toolbar-title>
 
-        <q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />
+        <!--<q-btn dense flat round icon="menu" @click="rightShown = !rightShown" />-->
 
         <q-toggle v-model="dark" icon="brightness_medium">
           <q-tooltip anchor="bottom right" self="center middle">Dark Mode</q-tooltip>
@@ -44,7 +44,6 @@
     </q-drawer>
 
     <q-drawer v-model="rightShown" side="right" bordered>
-      OPA
     </q-drawer>
 
     <q-page-container>
@@ -57,7 +56,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import { DbColors } from 'dashblocks_dev/src/components';
 
 export default {
   name: 'SwsUxLayout',
@@ -133,7 +131,6 @@ export default {
         if (!this.rotateEnabled) {
           return;
         }
-        console.log(`Rotating screen: ${Date.now()}`);
         this.rotateCurrent++;
         if (this.rotateCurrent >= this.rotateOptions.length) {
           this.rotateCurrent = 0;
@@ -149,7 +146,6 @@ export default {
     }
   },
   mounted() {
-    this.testColors = DbColors.getColors(true); // TEMP TODO REMOVE
     this.$q.dark.set(this.dark);
     this.initRefresh();
   },
@@ -170,7 +166,6 @@ export default {
       });
     },
     handleLeftLayout(state) {
-      console.log(`Left Layout ! ${state}`);
       this.$nextTick(() => {
         setTimeout(() => {
           window.dispatchEvent(new Event('resize'));

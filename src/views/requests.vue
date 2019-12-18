@@ -9,10 +9,7 @@
 </template>
 
 <script>
-// Development
-import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
-// Prod
-// import { DbData, DbDashboard } from 'dashblocks';
+import { DbData } from 'dashblocks';
 import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
@@ -22,8 +19,7 @@ import { vgtMethods } from '../mixins/vgtmethods';
 export default {
   name: 'ApiView',
   components: {
-    TitleBar,
-    DbDashboard
+    TitleBar
   },
   mixins: [vgtMethods],
   data() {
@@ -151,13 +147,11 @@ export default {
   watch: {
     refreshTrigger: {
       handler: function() {
-        console.log(`Refreshing stats: ${Date.now()}`);
         this.getStats({ fields: ['method'] });
       }
     },
     statsUpdated: {
       handler: function() {
-        console.log(`stats updated`);
         this.updateStats();
       }
     }

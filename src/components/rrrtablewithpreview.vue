@@ -86,8 +86,6 @@ import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import { vgtMethods } from '../mixins/vgtmethods';
 import Prism from 'prismjs';
-//import 'prismjs/themes/prism-tomorrow.css';
-//import 'prismjs/themes/prism.css';
 import 'prismjs/components/prism-json';
 
 export default {
@@ -146,7 +144,6 @@ export default {
   watch: {
     statsUpdated: {
       handler: function() {
-        console.log(`stats updated`);
         this.updateStats();
       }
     },

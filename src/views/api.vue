@@ -95,7 +95,6 @@ export default {
     },
     statsUpdated: {
       handler: function() {
-        console.log(`stats updated`);
         this.updateStats();
       }
     }

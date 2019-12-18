@@ -5,19 +5,13 @@
 </template>
 
 <script>
-// Development
-import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
-// Prod
-// import { DbData, DbDashboard } from 'dashblocks';
+import { DbData } from 'dashblocks';
 import { mapState, mapActions } from 'vuex';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 
 export default {
   name: 'HorizonView',
-  components: {
-    DbDashboard
-  },
   data() {
     return {
       timer: null,
@@ -61,7 +55,6 @@ export default {
   watch: {
     statsUpdated: {
       handler: function() {
-        console.log(`stats updated`);
         this.updateStats();
       }
     }

@@ -6,10 +6,7 @@
 </template>
 
 <script>
-// Development
-import { DbData, DbDashboard } from 'dashblocks_dev/src/components';
-// Prod
-// import { DbData, DbDashboard } from 'dashblocks';
+import { DbData } from 'dashblocks';
 import TitleBar from '@/components/titlebar.vue';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
@@ -17,7 +14,6 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'ApiResponses',
   components: {
-    DbDashboard,
     TitleBar
   },
   data() {

@@ -57,13 +57,11 @@ export default new Vuex.Store({
         let elapsed = tsNow - state.refreshLast;
         // If we're almost at refresh interval, refresh
         if (elapsed >= state.refreshTimeout - 100) {
-          console.log(`Need to refresh: ${tsNow} - ${elapsed}`);
           commit('PERFORM_REFRESH');
         }
         // If we're almost at rotate interval, rotate
         let rotateElapsed = tsNow - state.rotateLast;
         if (rotateElapsed >= state.rotateTimeout - 100) {
-          console.log(`Need to rotate: ${tsNow} - ${rotateElapsed}`);
           commit('PERFORM_ROTATE');
         }
       }, 1000);
