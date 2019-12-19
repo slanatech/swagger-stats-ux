@@ -1,7 +1,8 @@
 {
-  "name": "test-ux",
-  "version": "0.1.0",
-  "private": true,
+  "name": "swagger-stats-ux",
+  "version": "0.95.15",
+  "description": "API Telemetry and APM. Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices, based on express routes and Swagger (Open API) specification",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,6 +10,45 @@
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
+  "keywords": [
+    "api",
+    "observability",
+    "telemetry",
+    "node",
+    "express",
+    "koa",
+    "hapi",
+    "fastify",
+    "rest",
+    "statistics",
+    "monitoring",
+    "alerting",
+    "swagger",
+    "openapi",
+    "schema",
+    "prometheus",
+    "metrics",
+    "elasticsearch",
+    "kibana",
+    "grafana"
+  ],
+  "files": [
+    "dist/*",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slanatech/swagger-stats-ux"
+  },
+  "author": "https://github.com/sv2",
+  "homepage": "http://swaggerstats.io",
+  "bugs": {
+    "url": "https://github.com/slanatech/swagger-stats-ux/issues",
+    "email": "sv2@slana.tech"
+  },
+  "license": "MIT",
   "dependencies": {
   },
   "devDependencies": {
