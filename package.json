@@ -1,6 +1,6 @@
 {
   "name": "swagger-stats-ux",
-  "version": "0.95.15",
+  "version": "0.95.16",
   "description": "API Telemetry and APM. Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices, based on express routes and Swagger (Open API) specification",
   "private": false,
   "scripts": {
