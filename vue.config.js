@@ -3,7 +3,7 @@ const http = require('http');
 const webpack = require('webpack');
 
 module.exports = {
-  publicPath: '/ux',
+  publicPath: '/swagger-stats/ux',
   productionSourceMap: false,
   devServer: {
     proxy: {
