@@ -1,6 +1,6 @@
 {
   "name": "swagger-stats-ux",
-  "version": "0.95.19",
+  "version": "0.95.20",
   "description": "API Telemetry and APM. Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices, based on express routes and Swagger (Open API) specification",
   "private": false,
   "scripts": {
@@ -58,7 +58,7 @@
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
     "vuex": "^3.1.2",
-    "dashblocks": "^0.5.28",
+    "dashblocks": "^0.5.29",
     "moment": "^2.24.0",
     "prismjs": "^1.17.1",
     "ramda": "^0.26.1",
