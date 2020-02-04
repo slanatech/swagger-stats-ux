@@ -1,8 +1,6 @@
 import ApiOp from '@/store/apiop';
-//import { pathOr } from 'ramda';
 
-// ??? Configurable
-const baseURL = '/swagger-stats';
+const baseURL = '.';
 
 const swaggerStatsAPI = {
   getStats({ fields = null, method = null, path = null }) {

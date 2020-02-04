@@ -3,7 +3,9 @@ const http = require('http');
 const webpack = require('webpack');
 
 module.exports = {
-  publicPath: '/swagger-stats/ux',
+  publicPath: process.env.NODE_ENV === 'production'
+    ? './ux'
+    : '/swagger-stats/ux',
   productionSourceMap: false,
   devServer: {
     proxy: {

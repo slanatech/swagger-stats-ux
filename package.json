@@ -1,7 +1,7 @@
 {
   "name": "swagger-stats-ux",
-  "version": "0.95.20",
-  "description": "API Telemetry and APM. Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices, based on express routes and Swagger (Open API) specification",
+  "version": "0.95.21",
+  "description": "API Observability. Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices, based on express routes and Swagger (Open API) specification",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
