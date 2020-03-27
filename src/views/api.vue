@@ -21,7 +21,7 @@
       >
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'expand'">
-            <q-btn flat round color="secondary" icon="play_arrow" size="xs" @click="handleShow(props.row.originalIndex)" />
+            <!--<q-btn flat round color="secondary" icon="play_arrow" size="xs" @click="handleShow(props.row.originalIndex)" />-->
           </span>
           <span v-else-if="props.column.field == 'method'">
             <router-link :to="{ path: 'apiop', query: { method: props.row.method, path: props.row.path } }">{{ props.row.method }}</router-link>
@@ -55,7 +55,7 @@ export default {
       timer: null,
       isDark: false,
       columns: [
-        { label: '', field: 'expand', width: '1%', tdClass: 'text-center pointer' },
+        //{ label: '', field: 'expand', width: '1%', tdClass: 'text-center pointer' },
         { label: 'Method', field: 'method', tdClass: 'text-weight-bold' },
         { label: 'Path', field: 'path', tdClass: 'text-weight-bold' },
         { label: 'Requests', field: 'requests', type: 'number', tdClass: 'text-weight-bold' },

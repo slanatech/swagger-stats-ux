@@ -9,8 +9,8 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     proxy: {
-      '/swagger-stats': {
-        target: 'http://localhost:3040',
+      '/swagger-stats/ux/stats': {
+        target: 'http://localhost:3040/swagger-stats/stats',
         // This enables keepalive via proxy
         // See https://github.com/http-party/node-http-proxy/issues/767
         agent: http.globalAgent
