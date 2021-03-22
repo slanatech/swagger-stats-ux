@@ -11,6 +11,8 @@ import Errors from './views/errors.vue';
 import LastErrors from './views/lasterrors.vue';
 import LongestRequests from './views/longestrequests.vue';
 import Payload from './views/payload.vue';
+import Login from './pages/login.vue';
+
 
 Vue.use(Router);
 
@@ -71,6 +73,10 @@ export default new Router({
           component: Errors
         }
       ]
+    },
+    {
+      path: '/login',
+      component: Login
     }
   ]
 });

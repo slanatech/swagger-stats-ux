@@ -4,6 +4,8 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="leftShown = !leftShown" />
 
+        <!--<img src="logo.png" style="height: 26px; width: 42px;">-->
+
         <q-toolbar-title>
           swagger-stats
         </q-toolbar-title>

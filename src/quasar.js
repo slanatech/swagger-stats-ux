@@ -34,10 +34,13 @@ import {
   QTable,
   QCard,
   QCardSection,
+  QCardActions,
   QSelect,
   QToggle,
   QBadge,
-  QSpace
+  QSpace,
+  QInput,
+  QImg
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -67,10 +70,13 @@ Vue.use(Quasar, {
     QTable,
     QCard,
     QCardSection,
+    QCardActions,
     QSelect,
     QToggle,
     QBadge,
-    QSpace
+    QSpace,
+    QInput,
+    QImg
   },
   directives: {
     Ripple
