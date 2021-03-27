@@ -14,6 +14,10 @@ module.exports = {
         // This enables keepalive via proxy
         // See https://github.com/http-party/node-http-proxy/issues/767
         agent: http.globalAgent
+      },
+      '/swagger-stats/ux/logout': {
+        target: 'http://localhost:3040/swagger-stats/logout',
+        agent: http.globalAgent
       }
     }
   },
@@ -27,7 +31,7 @@ module.exports = {
 
   pluginOptions: {
     quasar: {
-      importStrategy: 'manual',
+      importStrategy: 'kebab',
       rtlSupport: false,
       treeShake: true
     }

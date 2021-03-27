@@ -23,6 +23,8 @@
         <q-btn dense flat size="md" round icon="refresh" @click="performRefresh" />
 
         <q-btn-toggle v-model="refreshTimeout" text-color="blue-grey-8" toggle-text-color="grey-4" size="md" dense flat :options="refreshOptions" />
+
+        <q-btn v-if="loggedin" dense flat size="md" round icon="logout" @click="performLogout" />
       </q-toolbar>
     </q-header>
 
@@ -95,6 +97,8 @@ export default {
   },
   computed: {
     ...mapState({
+      authenticated: state => state.authenticated,
+      loggedin: state => state.loggedin,
       rotateTrigger: state => state.rotateTrigger
     }),
     refreshTimeout: {
@@ -155,7 +159,8 @@ export default {
       setDark: 'setDark',
       initRefresh: 'initRefresh',
       setRefreshTimeout: 'setRefreshTimeout', // map `this.getStats()` to `... dispatch('getStats')`
-      performRefresh: 'performRefresh'
+      performRefresh: 'performRefresh',
+      logout: 'logout'
     }),
     toggleMiniState() {
       this.miniState = !this.miniState;
@@ -172,6 +177,10 @@ export default {
           window.dispatchEvent(new Event('resize'));
         }, 100);
       });
+    },
+    async performLogout() {
+      await this.logout();
+      this.$router.push('/login');
     }
   }
 };

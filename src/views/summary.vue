@@ -13,6 +13,7 @@ import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
 import utils from '@/utils.js';
+import Prism from 'prismjs';
 
 export default {
   name: 'SummaryView',

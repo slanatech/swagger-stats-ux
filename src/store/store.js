@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import api from '@/store/api';
 import stats from '@/store/stats';
 import RRRCollection from '@/store/rrrcollection';
 
@@ -14,7 +15,9 @@ export default new Vuex.Store({
     intervalId: null,
     rotateTrigger: 0,
     rotateLast: 0,
-    rotateTimeout: 15000
+    rotateTimeout: 15000,
+    authenticated: false,
+    loggedin: false
   },
   modules: {
     stats,
@@ -25,6 +28,10 @@ export default new Vuex.Store({
     SET_DARK(state, { dark }) {
       localStorage['sws-dark-mode'] = dark;
       state.dark = dark;
+    },
+    SET_AUTH(state, { authenticated = false, loggedin = false }) {
+      state.authenticated = authenticated;
+      state.loggedin = loggedin;
     },
     SET_INTERVAL_ID(state, { id }) {
       state.intervalId = id;
@@ -72,6 +79,16 @@ export default new Vuex.Store({
     },
     performRefresh({ commit }) {
       commit('PERFORM_REFRESH');
+    },
+    async login({ commit, dispatch }, { username, password }) {
+      let loginResult = await dispatch('stats/getStats', { username: username, password: password });
+      commit('SET_AUTH', { authenticated: loginResult.success, loggedin: loginResult.success });
+      return loginResult;
+    },
+    async logout({ commit }) {
+      let logoutResult = await api.logout();
+      commit('SET_AUTH', { authenticated: false, loggedin: false });
+      return logoutResult;
     }
   }
 });

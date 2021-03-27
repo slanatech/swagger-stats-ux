@@ -4,27 +4,27 @@
       <q-page class="flex flex-center">
         <q-card class="ub-login-card">
           <q-card-section class="ub-login-hdr text-white text-center">
-            <img src="logo.png" style="height: 135px; width: 210px;">
+            <img src="logo.png" style="height: 135px; width: 210px;" />
             <div class="text-h5 absolute-bottom" style="margin-bottom: 20px;">swagger-stats</div>
           </q-card-section>
 
           <q-card-section>
             <q-card-section>
-              <q-input v-model="username" clearable label="Username or Email">
+              <q-input v-model="username" clearable label="Username" v-on:keyup.enter="handleLogin">
                 <template v-slot:prepend>
-                  <q-icon name="mdi-account" />
+                  <q-icon name="person" />
                 </template>
               </q-input>
-              <q-input v-model="password" type="password" clearable label="password">
+              <q-input v-model="password" type="password" clearable label="Password" v-on:keyup.enter="handleLogin">
                 <template v-slot:prepend>
-                  <q-icon name="mdi-lock" />
+                  <q-icon name="lock" />
                 </template>
               </q-input>
             </q-card-section>
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn color="primary" unelevated>Login</q-btn>
+            <q-btn color="primary" unelevated @click="handleLogin">Login</q-btn>
           </q-card-actions>
         </q-card>
       </q-page>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -49,6 +50,25 @@ export default {
   },
   mounted() {
     this.$q.dark.set(this.dark);
+  },
+  methods: {
+    ...mapActions({
+      login: 'login'
+    }),
+    handleLogin: async function() {
+      let loginRes = await this.login({ username: this.username, password: this.password });
+      if (loginRes.success) {
+        this.$router.push('/');
+      } else {
+        this.$q.notify({
+          position: 'top',
+          type: 'negative',
+          message: 'Authentication Failed',
+          caption: loginRes.payload,
+          progress: true,
+        });
+      }
+    }
   }
 };
 </script>

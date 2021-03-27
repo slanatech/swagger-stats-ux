@@ -11,6 +11,7 @@ class ApiOp {
     this.code = 0;
     this.message = '';
     this.payload = null;
+    this.headers = null;
   }
 
   execute() {
@@ -22,6 +23,7 @@ class ApiOp {
           apiop.code = response.status;
           apiop.payload = response.data;
           apiop.message = response.statusText;
+          apiop.headers = response.headers;
           resolve(apiop);
         })
         .catch(function(error) {
@@ -29,6 +31,7 @@ class ApiOp {
           apiop.code = error.response.status;
           apiop.message = error.response.statusText;
           apiop.payload = error.response.data;
+          apiop.headers = error.response.headers;
           resolve(apiop);
         });
     });

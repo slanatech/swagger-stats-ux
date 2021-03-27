@@ -19,13 +19,16 @@ const mutations = {
 };
 
 const actions = {
-  async getStats({ commit }, { fields = null, method = null, path = null }) {
+  async getStats({ commit }, { fields = null, method = null, path = null, username = null, password = null }) {
     let stats = null;
-    let getStatsRes = await api.getStats({ fields: fields, method: method, path: path });
+    let getStatsRes = await api.getStats({ fields: fields, method: method, path: path, username: username, password: password });
     if (getStatsRes.success) {
       stats = getStatsRes.payload;
+      commit('SET_STATS', { stats: stats });
+    } else {
+      commit('SET_STATS', { stats: {} });
     }
-    commit('SET_STATS', { stats: stats });
+    return getStatsRes;
   }
 };
 

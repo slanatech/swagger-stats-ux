@@ -47,7 +47,7 @@ Vue.use(DashBlocks, {
 });
 
 // Dashblocks CSS
-import 'dashblocks/dist/dashblocks.css';
+import 'dashblocks/src/assets/scss/dashblocks.scss';
 
 Vue.config.productionTip = false;
 

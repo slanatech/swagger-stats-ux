@@ -10,6 +10,7 @@ import {
   Quasar,
   Ripple,
   LoadingBar,
+  Notify,
   QLayout,
   QHeader,
   QDrawer,
@@ -82,6 +83,7 @@ Vue.use(Quasar, {
     Ripple
   },
   plugins: {
-    LoadingBar
+    LoadingBar,
+    Notify
   }
 });
