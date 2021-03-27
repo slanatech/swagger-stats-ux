@@ -1,6 +1,6 @@
 {
   "name": "swagger-stats-ux",
-  "version": "0.95.23",
+  "version": "0.95.24",
   "description": "API Observability. Trace API calls and Monitor API performance, health and usage statistics in Node.js Microservices, based on express routes and Swagger (Open API) specification",
   "private": false,
   "scripts": {
