@@ -41,7 +41,8 @@ import {
   QBadge,
   QSpace,
   QInput,
-  QImg
+  QImg,
+  QBar
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -77,7 +78,8 @@ Vue.use(Quasar, {
     QBadge,
     QSpace,
     QInput,
-    QImg
+    QImg,
+    QBar
   },
   directives: {
     Ripple

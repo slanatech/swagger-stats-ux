@@ -9,10 +9,12 @@
 import { DbData } from 'dashblocks';
 import TitleBar from '@/components/titlebar.vue';
 import statsContainer from '@/store/statscontainer';
+import { swsdashboard } from '../mixins/swsdashboard';
 import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'ApiResponses',
+  mixins: [swsdashboard],
   components: {
     TitleBar
   },
@@ -25,6 +27,7 @@ export default {
           type: 'grid',
           size: 12
         },
+        colorScheme: 'default',
         widgets: []
       },
       ready: false
@@ -32,7 +35,6 @@ export default {
   },
   computed: {
     ...mapState({
-      dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })
@@ -51,6 +53,7 @@ export default {
     }
   },
   mounted() {
+    this.dbspec.colorScheme = this.dashboardColorScheme;
     this.getStats({ fields: ['apistats'], method: this.apiOpMethod, path: this.apiOpPath });
     this.ready = true;
   },

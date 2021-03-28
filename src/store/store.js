@@ -2,13 +2,13 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/store/api';
 import stats from '@/store/stats';
+import layout from '@/store/layout';
 import RRRCollection from '@/store/rrrcollection';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    dark: (localStorage['sws-dark-mode'] || 'false') === 'true',
     refreshTrigger: 0,
     refreshTimeout: 5000,
     refreshLast: 0,
@@ -21,14 +21,11 @@ export default new Vuex.Store({
   },
   modules: {
     stats,
+    layout,
     lasterrors: RRRCollection,
     longestrequests: RRRCollection
   },
   mutations: {
-    SET_DARK(state, { dark }) {
-      localStorage['sws-dark-mode'] = dark;
-      state.dark = dark;
-    },
     SET_AUTH(state, { authenticated = false, loggedin = false }) {
       state.authenticated = authenticated;
       state.loggedin = loggedin;
@@ -49,9 +46,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setDark({ commit }, { dark }) {
-      commit('SET_DARK', { dark: dark });
-    },
     initRefresh({ commit, state }) {
       if (state.intervalId) {
         return; // Already set up

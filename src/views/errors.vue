@@ -12,10 +12,12 @@ import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
+import { swsdashboard } from '../mixins/swsdashboard';
 import utils from '@/utils.js';
 
 export default {
   name: 'ErrorsView',
+  mixins: [swsdashboard],
   components: {
     TitleBar
   },
@@ -31,6 +33,7 @@ export default {
           type: 'grid',
           size: 12
         },
+        colorScheme: 'default',
         // prettier-ignore
         widgets: [
           {
@@ -132,7 +135,6 @@ export default {
   },
   computed: {
     ...mapState({
-      dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })
@@ -161,6 +163,7 @@ export default {
       getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
     }),
     initialize: function() {
+      this.dbspec.colorScheme = this.dashboardColorScheme;
       this.dbdata.setWData('w1', { data: [] });
 
       this.dbdata.setWData('wR', { value: 0, trend: [] });

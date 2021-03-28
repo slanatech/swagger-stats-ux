@@ -14,6 +14,7 @@ import TitleBar from '@/components/titlebar.vue';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
+import { swsdashboard } from '../mixins/swsdashboard';
 import { vgtMethods } from '../mixins/vgtmethods';
 
 export default {
@@ -21,7 +22,7 @@ export default {
   components: {
     TitleBar
   },
-  mixins: [vgtMethods],
+  mixins: [vgtMethods,swsdashboard],
   data() {
     return {
       timer: null,
@@ -49,6 +50,7 @@ export default {
           type: 'grid',
           size: 12
         },
+        colorScheme: 'default',
         // prettier-ignore
         widgets: [
           { id: 'w1', type: 'DbNumber', cspan: 3, properties: { title: 'GET', subtitle: 'GET Requests' } },
@@ -136,7 +138,6 @@ export default {
   },
   computed: {
     ...mapState({
-      dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     }),
@@ -166,6 +167,7 @@ export default {
       getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
     }),
     initialize: function() {
+      this.dbspec.colorScheme = this.dashboardColorScheme;
       // Init dashboard data
       this.dbdata.setWData('w1', { value: 0, total: 0 });
       this.dbdata.setWData('w2', { value: 0, total: 0 });

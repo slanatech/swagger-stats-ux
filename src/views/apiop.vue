@@ -35,10 +35,12 @@ import { DbData } from 'dashblocks';
 import { pathOr } from 'ramda';
 import statsContainer from '@/store/statscontainer';
 import { mapState, mapActions } from 'vuex';
+import { swsdashboard } from '../mixins/swsdashboard';
 import utils from '@/utils.js';
 
 export default {
   name: 'ApiOperation',
+  mixins: [swsdashboard],
   data() {
     return {
       timer: null,
@@ -53,6 +55,7 @@ export default {
           type: 'grid',
           size: 12
         },
+        colorScheme: 'default',
         // prettier-ignore
         widgets: [
           { id: 'w1', type: 'DbNumber', cspan: 2, properties: { title: 'Requests', subtitle: 'Total requests received', icon: 'fa fa-signal' } },
@@ -167,7 +170,6 @@ export default {
   },
   computed: {
     ...mapState({
-      dark: state => state.dark,
       refreshTrigger: state => state.refreshTrigger,
       statsUpdated: state => state.stats.updated
     })
@@ -211,6 +213,7 @@ export default {
       getStats: 'stats/getStats' // map `this.getStats()` to `... dispatch('getStats')`
     }),
     initialize: function() {
+      this.dbspec.colorScheme = this.dashboardColorScheme;
       // Init dashboard data
       this.dbdata.setWData('w1', { value: 0 });
       this.dbdata.setWData('w2', { value: 0 });

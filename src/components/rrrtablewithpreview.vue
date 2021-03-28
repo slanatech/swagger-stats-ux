@@ -129,7 +129,7 @@ export default {
   },
   computed: {
     ...mapState({
-      dark: state => state.dark,
+      dark: state => state.layout.dark,
       statsUpdated: state => state.stats.updated,
       storedItems: state => state.lasterrors.items,
       expandedState: state => state.lasterrors.expanded

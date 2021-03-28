@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     ...mapState({
-      dark: state => state.dark,
+      dark: state => state.layout.dark,
       statsUpdated: state => state.stats.updated,
       refreshTrigger: state => state.refreshTrigger
     }),
