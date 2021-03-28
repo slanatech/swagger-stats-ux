@@ -44,7 +44,7 @@ export default {
   computed: {
     dark: {
       get() {
-        return this.$store.state.dark;
+        return this.$store.state.layout.dark;
       }
     }
   },
