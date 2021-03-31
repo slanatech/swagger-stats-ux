@@ -1,9 +1,11 @@
 import api from '@/store/api';
+import router from '@/router';
 import statsContainer from '@/store/statscontainer';
+import { Notify } from 'quasar';
 
 // TODO consider placeholders
 const state = {
-  updated: 0
+  updated: 0,
 };
 
 const getters = {};
@@ -15,7 +17,7 @@ const mutations = {
     // In Vuex we store the timestamp of last stats update, so views can watch on it and react
     statsContainer.updateStats(stats);
     state.updated = Date.now();
-  }
+  },
 };
 
 const actions = {
@@ -27,9 +29,18 @@ const actions = {
       commit('SET_STATS', { stats: stats });
     } else {
       commit('SET_STATS', { stats: {} });
+      Notify.create({
+        position: 'top',
+        type: 'negative',
+        message: 'API ERROR',
+        caption: `${getStatsRes.message} (${getStatsRes.code})`,
+      });
+      if (getStatsRes.code === 403) {
+        router.push('/login');
+      }
     }
     return getStatsRes;
-  }
+  },
 };
 
 export default {
@@ -37,5 +48,5 @@ export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 };
