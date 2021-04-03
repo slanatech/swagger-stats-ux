@@ -16,6 +16,7 @@ const mutations = {
     // size of stats can be quite big and they can be updated frequently
     // In Vuex we store the timestamp of last stats update, so views can watch on it and react
     statsContainer.updateStats(stats);
+    document.title = stats.name || 'swagger-stats';
     state.updated = Date.now();
   },
 };
