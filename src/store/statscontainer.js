@@ -38,6 +38,35 @@ class StatsContainer {
     return res;
   }
 
+  getApiStatsArray1000() {
+    let res = [];
+    let apiStats = pathOr(null, ['apistats'], this);
+    let apiDefs = pathOr(null, ['apidefs'], this);
+    if (!apiStats) {
+      return res;
+    }
+    for(let idx=0;idx<50;idx++) {
+      for (let apiPath of Object.keys(apiStats)) {
+        let apiMethods = apiStats[apiPath];
+        for (let apiMethod of Object.keys(apiMethods)) {
+          res.push(
+            Object.assign(
+              {
+                path: `${idx}-apiPath`,
+                method: apiMethod
+              },
+              apiMethods[apiMethod],
+              {
+                tags: pathOr([], [apiPath, apiMethod, 'tags'], apiDefs).join(',')
+              }
+            )
+          );
+        }
+      }
+    }
+    return res;
+  }
+
   getMethodStatsArray() {
     let res = [];
     let allMethodStats = pathOr(null, ['method'], this);
