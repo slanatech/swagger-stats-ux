@@ -129,6 +129,21 @@ table.vgt-table.sws-table.nocturnal th {
   }
 }
 
+.dbw-loading {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.dbw-r-skeleton {
+  z-index: 1;
+  height: 98px;
+  width: 98px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .sws-code {
   /**
    * GHColors theme by Avi Aryan (http://aviaryan.in)

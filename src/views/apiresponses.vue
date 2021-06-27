@@ -62,7 +62,7 @@ export default {
         // isIntersecting is true when element and viewport are overlapping
         // isIntersecting is false when element and viewport don't overlap
         let needUpdate = false;
-        console.log(`VISIBILITY CHANGE: ${entries.length}`);
+        //console.log(`VISIBILITY CHANGE: ${entries.length}`);
         entries.map((e) => {
           let classes = e.target.className.split(' ');
           let id = classes.find((x) => x.startsWith('dbw')).replace('dbw', '');
@@ -72,7 +72,7 @@ export default {
             needUpdate = true;
           }
         });
-        console.log(`VISIBILITY: ${JSON.stringify(this.visibility)}`);
+        //console.log(`VISIBILITY: ${JSON.stringify(this.visibility)}`);
 
         if (needUpdate) {
           this.$nextTick(() => {
@@ -93,7 +93,6 @@ export default {
     updateVisible: function () {
       let dbWidgets = this.generateWidgets();
       this.dbspec.widgets = dbWidgets;
-      console.log(`updateVisible!!!`);
     },
     generateWidgets: function () {
       let dbWidgets = [];
@@ -125,7 +124,7 @@ export default {
         } else {
           let wdef = {
             id: wid,
-            type: 'DbNone',
+            type: 'DbWidgetLoading',
             cspan: 3,
             class: wid,
             height: 220,
@@ -142,7 +141,7 @@ export default {
       });
 
       // Generate dashboard dynamically and set data
-      let apiOps = statsContainer.getApiStatsArray1000();
+      let apiOps = statsContainer.getApiStatsArray();
       this.apiOpsData = Object.freeze(apiOps); // Store cache, to update when visibility changes
 
       // If number of widgets changed, re-init visibility with all widgets set to non-visible

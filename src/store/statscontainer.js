@@ -25,43 +25,14 @@ class StatsContainer {
           Object.assign(
             {
               path: apiPath,
-              method: apiMethod
+              method: apiMethod,
             },
             apiMethods[apiMethod],
             {
-              tags: pathOr([], [apiPath, apiMethod, 'tags'], apiDefs).join(',')
+              tags: pathOr([], [apiPath, apiMethod, 'tags'], apiDefs).join(','),
             }
           )
         );
-      }
-    }
-    return res;
-  }
-
-  getApiStatsArray1000() {
-    let res = [];
-    let apiStats = pathOr(null, ['apistats'], this);
-    let apiDefs = pathOr(null, ['apidefs'], this);
-    if (!apiStats) {
-      return res;
-    }
-    for(let idx=0;idx<50;idx++) {
-      for (let apiPath of Object.keys(apiStats)) {
-        let apiMethods = apiStats[apiPath];
-        for (let apiMethod of Object.keys(apiMethods)) {
-          res.push(
-            Object.assign(
-              {
-                path: `${idx}-apiPath`,
-                method: apiMethod
-              },
-              apiMethods[apiMethod],
-              {
-                tags: pathOr([], [apiPath, apiMethod, 'tags'], apiDefs).join(',')
-              }
-            )
-          );
-        }
       }
     }
     return res;
@@ -77,7 +48,7 @@ class StatsContainer {
       res.push(
         Object.assign(
           {
-            method: methodName
+            method: methodName,
           },
           allMethodStats[methodName]
         )
@@ -110,7 +81,7 @@ class StatsContainer {
       }
     }
     // Sort it by timecode ascending
-    timelineSorted.sort(function(a, b) {
+    timelineSorted.sort(function (a, b) {
       return a.tc - b.tc;
     });
     return timelineSorted;

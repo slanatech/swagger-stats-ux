@@ -4,6 +4,7 @@ import router from './router';
 import store from './store/store';
 import VueGoodTablePlugin from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
+import DbWidgetLoading from '@/components/DbWidgetLoading.vue';
 
 import './quasar';
 
@@ -23,7 +24,7 @@ import {
   DbEasyPie,
   DbSparkline,
   DbDygraphsBar,
-  DbDygraphsLine
+  DbDygraphsLine,
 } from 'dashblocks';
 
 Vue.use(DashBlocks, {
@@ -42,8 +43,8 @@ Vue.use(DashBlocks, {
     DbEasyPie,
     DbSparkline,
     DbDygraphsBar,
-    DbDygraphsLine
-  }
+    DbDygraphsLine,
+  },
 });
 
 // Dashblocks CSS
@@ -52,9 +53,10 @@ import 'dashblocks/src/assets/scss/dashblocks.scss';
 Vue.config.productionTip = false;
 
 Vue.use(VueGoodTablePlugin);
+Vue.component('DbWidgetLoading', DbWidgetLoading);
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount('#app');
